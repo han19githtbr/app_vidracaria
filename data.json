@@ -1,0 +1,601 @@
+{
+  "app": {
+    "title": "Guia do Vidraceiro Profissional",
+    "subtitle": "Ferramentas certas. Cuidados precisos. Trabalho impecável.",
+    "version": "1.0"
+  },
+  "ferramentas": [
+    {
+      "id": "luvas",
+      "nome": "Luvas de Proteção",
+      "categoria": "EPI",
+      "descricao": "Evita cortes nas mãos ao manusear vidros e espelhos.",
+      "uso": "Obrigatório em todo manuseio de vidro, especialmente ao cortar, lixar e remover vidros quebrados.",
+      "nivel_risco": "alto",
+      "icone": "🧤"
+    },
+    {
+      "id": "silicone",
+      "nome": "Silicone",
+      "categoria": "Fixação",
+      "descricao": "Selante flexível para fixar e vedar vidros. Não endurece de forma rígida, evitando quebra por pressão.",
+      "uso": "Fixação de espelhos, box, vidros em janelas. Prefira ao massa quando há risco de quebra.",
+      "nivel_risco": "baixo",
+      "icone": "🔧"
+    },
+    {
+      "id": "bomba-silicone",
+      "nome": "Bomba de Silicone",
+      "categoria": "Fixação",
+      "descricao": "Pistola para aplicar o cartucho de silicone com precisão e pressão uniforme.",
+      "uso": "Sempre usar com o cartucho de silicone para aplicação controlada.",
+      "nivel_risco": "baixo",
+      "icone": "🔫"
+    },
+    {
+      "id": "trena",
+      "nome": "Trena (Metro)",
+      "categoria": "Medição",
+      "descricao": "Fita métrica para medir vãos, janelas e dimensões de vidros com precisão.",
+      "uso": "Medir o vão antes de cortar qualquer vidro. Medir duas vezes, cortar uma.",
+      "nivel_risco": "baixo",
+      "icone": "📏"
+    },
+    {
+      "id": "lixadeira",
+      "nome": "Lixadeira",
+      "categoria": "Acabamento",
+      "descricao": "Usada para lixar bordas cortantes do vidro e cortar perfis metálicos.",
+      "uso": "Lixar todas as bordas após o corte. Usar para cortar perfis e tampas de box.",
+      "nivel_risco": "medio",
+      "icone": "⚙️"
+    },
+    {
+      "id": "nivel",
+      "nome": "Nível (Normal ou Laser)",
+      "categoria": "Medição",
+      "descricao": "Garante que o vidro ou espelho seja instalado na posição perfeitamente nivelada.",
+      "uso": "Indispensável na instalação de espelhos, box e janelas.",
+      "nivel_risco": "baixo",
+      "icone": "📐"
+    },
+    {
+      "id": "fita-dupla-face",
+      "nome": "Fita Dupla Face",
+      "categoria": "Fixação",
+      "descricao": "Fita adesiva de dupla face para fixação temporária ou definitiva em superfícies lisas.",
+      "uso": "Fixação de espelhos pequenos e moldes. Suporte durante a cura do silicone.",
+      "nivel_risco": "baixo",
+      "icone": "🎗️"
+    },
+    {
+      "id": "massa",
+      "nome": "Massa para Vidro",
+      "categoria": "Fixação",
+      "descricao": "Massa de vedação tradicional. Atenção: quando endurece pode gerar pressão e quebrar vidros sensíveis.",
+      "uso": "Usar apenas quando indicado. Para vidros temperados e sensíveis, prefira silicone.",
+      "nivel_risco": "medio",
+      "icone": "🪣"
+    },
+    {
+      "id": "estilete",
+      "nome": "Estilete",
+      "categoria": "Corte",
+      "descricao": "Lâmina retrátil para cortes precisos em materiais de vedação e acabamento.",
+      "uso": "Cortar silicone curado, borrachas de vedação e materiais de acabamento.",
+      "nivel_risco": "medio",
+      "icone": "🔪"
+    },
+    {
+      "id": "diamante",
+      "nome": "Diamante para Corte de Vidro",
+      "categoria": "Corte",
+      "descricao": "Ferramenta com ponta de diamante para riscar e cortar vidros e espelhos com precisão.",
+      "uso": "Riscar o vidro em linha reta com pressão uniforme, depois aplicar pressão para quebrar na linha marcada.",
+      "nivel_risco": "alto",
+      "icone": "💎"
+    },
+    {
+      "id": "chave-phillips",
+      "nome": "Chave Phillips",
+      "categoria": "Montagem",
+      "descricao": "Chave de fenda cruzada para apertar parafusos de perfis e ferragens.",
+      "uso": "Montagem de kits de box, fixação de ferragens e perfis.",
+      "nivel_risco": "baixo",
+      "icone": "🔩"
+    },
+    {
+      "id": "chave-fenda",
+      "nome": "Chave de Fenda",
+      "categoria": "Montagem",
+      "descricao": "Chave para parafusos de fenda simples.",
+      "uso": "Ajustes de ferragens, perfis e dobradiças.",
+      "nivel_risco": "baixo",
+      "icone": "🔧"
+    },
+    {
+      "id": "chave-allen",
+      "nome": "Chave Allen (Jogo)",
+      "categoria": "Montagem",
+      "descricao": "Conjunto de chaves hexagonais para parafusos Allen presentes em kits de box e ferragens modernas.",
+      "uso": "Montagem e ajuste de kits de box, puxadores e dobradiças de vidro.",
+      "nivel_risco": "baixo",
+      "icone": "🔑"
+    },
+    {
+      "id": "furadeira",
+      "nome": "Furadeira",
+      "categoria": "Montagem",
+      "descricao": "Para fazer furos em paredes, perfis e suportes. Usar broca diamantada para furar vidro temperado.",
+      "uso": "Fixação de perfis nas paredes. NUNCA furar vidro temperado com broca comum.",
+      "nivel_risco": "medio",
+      "icone": "🔩"
+    },
+    {
+      "id": "parafusadeira",
+      "nome": "Parafusadeira",
+      "categoria": "Montagem",
+      "descricao": "Versão elétrica da chave para agilizar a instalação de parafusos.",
+      "uso": "Fixação rápida de perfis e suportes metálicos.",
+      "nivel_risco": "baixo",
+      "icone": "⚡"
+    },
+    {
+      "id": "ventosa",
+      "nome": "Ventosa",
+      "categoria": "Manuseio",
+      "descricao": "Ventosas de sucção para pegar e movimentar vidros pesados com segurança.",
+      "uso": "Obrigatório para vidros temperados, espelhos grandes e qualquer vidro acima de 10kg.",
+      "nivel_risco": "alto",
+      "icone": "🔵"
+    },
+    {
+      "id": "lixa",
+      "nome": "Lixa Manual",
+      "categoria": "Acabamento",
+      "descricao": "Para acabamento fino nas bordas do vidro após o corte com diamante.",
+      "uso": "Lixar bordas após corte, usando movimentos suaves e circulares com água.",
+      "nivel_risco": "medio",
+      "icone": "📄"
+    },
+    {
+      "id": "alcool-querosene",
+      "nome": "Álcool / Querosene",
+      "categoria": "Limpeza",
+      "descricao": "Produtos para limpeza e remoção de manchas de silicone, gordura e sujeiras nos vidros.",
+      "uso": "Limpar vidros após instalação. Querosene remove silicone curado. Álcool para limpeza final.",
+      "nivel_risco": "baixo",
+      "icone": "🧴"
+    },
+    {
+      "id": "martelo",
+      "nome": "Martelo",
+      "categoria": "Remoção",
+      "descricao": "Para remover vidros quebrados e perfis antigos.",
+      "uso": "Remover vidros quebrados com cuidado, protegendo-se com luvas e óculos.",
+      "nivel_risco": "alto",
+      "icone": "🔨"
+    },
+    {
+      "id": "roldanas",
+      "nome": "Roldanas",
+      "categoria": "Montagem",
+      "descricao": "Rolamentos usados em box e portas de correr de vidro.",
+      "uso": "Instalação e substituição em portas deslizantes de vidro e box de banheiro.",
+      "nivel_risco": "baixo",
+      "icone": "⚙️"
+    },
+    {
+      "id": "calcos",
+      "nome": "Calços de Suporte",
+      "categoria": "Instalação",
+      "descricao": "Suportes temporários para manter o vidro na posição enquanto o silicone cura.",
+      "uso": "Essencial na instalação de espelhos grandes. Remover após cura completa do silicone (24-48h).",
+      "nivel_risco": "baixo",
+      "icone": "🧱"
+    }
+  ],
+  "tipos_vidro": [
+    {
+      "id": "incolor",
+      "nome": "Vidro Incolor",
+      "descricao": "Vidro transparente padrão, sem coloração. Alta visibilidade e transmissão de luz.",
+      "usos": ["Janelas residenciais", "Vitrines", "Portas de entrada", "Divisórias"],
+      "sensibilidade": "media",
+      "pode_cortar": true,
+      "pode_furar": true,
+      "ferramentas_recomendadas": ["luvas", "diamante", "lixadeira", "lixa", "trena", "silicone", "bomba-silicone", "alcool-querosene"],
+      "cuidados": [
+        "Medir duas vezes antes de cortar",
+        "Lixar todas as bordas após o corte",
+        "Limpar com álcool antes de instalar",
+        "Usar silicone nas bordas para vedação"
+      ],
+      "cor_badge": "#4A9EBA"
+    },
+    {
+      "id": "fosco",
+      "nome": "Vidro Fosco",
+      "descricao": "Vidro com superfície tratada para difundir a luz, garantindo privacidade sem bloquear a claridade.",
+      "usos": ["Banheiros", "Escritórios", "Divisórias de ambientes", "Janelas de dormitórios"],
+      "sensibilidade": "media",
+      "pode_cortar": true,
+      "pode_furar": true,
+      "ferramentas_recomendadas": ["luvas", "diamante", "lixadeira", "lixa", "trena", "silicone", "bomba-silicone", "alcool-querosene"],
+      "cuidados": [
+        "Não usar produtos abrasivos na superfície fosca",
+        "Evitar esponjas ásperas na limpeza",
+        "Identificar o lado fosco e o liso antes de instalar",
+        "Limpar com pano macio e álcool"
+      ],
+      "cor_badge": "#8BA8B5"
+    },
+    {
+      "id": "mini-boreal",
+      "nome": "Vidro Mini Boreal",
+      "descricao": "Vidro com textura granulada em uma das faces, oferecendo privacidade com estética diferenciada.",
+      "usos": ["Banheiros", "Box de banheiro", "Portas internas", "Divisórias decorativas"],
+      "sensibilidade": "media",
+      "pode_cortar": true,
+      "pode_furar": false,
+      "ferramentas_recomendadas": ["luvas", "diamante", "lixadeira", "lixa", "trena", "silicone", "bomba-silicone"],
+      "cuidados": [
+        "A face texturizada acumula sujeira com mais facilidade",
+        "Limpar a textura com escova de cerdas macias",
+        "Não aplicar pressão excessiva na textura ao instalar",
+        "Verificar a orientação correta da textura antes de fixar"
+      ],
+      "cor_badge": "#7B9E87"
+    },
+    {
+      "id": "opaco",
+      "nome": "Vidro Opaco",
+      "descricao": "Vidro completamente opaco, sem transmissão de luz. Fornece total privacidade.",
+      "usos": ["Divisórias de privacidade", "Painéis decorativos", "Revestimentos"],
+      "sensibilidade": "baixa",
+      "pode_cortar": true,
+      "pode_furar": true,
+      "ferramentas_recomendadas": ["luvas", "diamante", "lixadeira", "lixa", "trena", "silicone", "bomba-silicone"],
+      "cuidados": [
+        "Verificar a face correta para instalação",
+        "Limpar com pano macio para não arranhar",
+        "Usar silicone neutro para evitar manchas"
+      ],
+      "cor_badge": "#AAAAAA"
+    },
+    {
+      "id": "temperado",
+      "nome": "Vidro Temperado",
+      "descricao": "Vidro tratado termicamente, 4-5x mais resistente. Quando quebra, fragmenta-se em pequenos pedaços arredondados, reduzindo risco de corte.",
+      "usos": ["Box de banheiro", "Portas de vidro", "Guarda-corpos", "Mesas de vidro", "Fachadas"],
+      "sensibilidade": "muito_alta",
+      "pode_cortar": false,
+      "pode_furar": false,
+      "ferramentas_recomendadas": ["luvas", "ventosa", "nivel", "trena", "silicone", "bomba-silicone", "furadeira", "chave-allen", "roldanas", "calcos"],
+      "cuidados": [
+        "⚠️ NUNCA cortar ou furar após temperagem - encomende no tamanho exato",
+        "⚠️ Não bater nas bordas ou cantos - ponto fraco do vidro temperado",
+        "Usar ventosa SEMPRE para movimentar",
+        "Não apertar excessivamente os perfis metálicos",
+        "Verificar se há lascas nas bordas antes de instalar",
+        "Usar silicone neutro - silicone ácido pode comprometer a estrutura",
+        "Jamais usar massa - a pressão ao endurecer pode quebrar o vidro"
+      ],
+      "cor_badge": "#2E6DA4"
+    },
+    {
+      "id": "jato-areia",
+      "nome": "Vidro Jato de Areia",
+      "descricao": "Vidro com design personalizado criado por jato de areia abrasivo. Pode ter padrões artísticos e decorativos.",
+      "usos": ["Decoração", "Divisórias de luxo", "Portas decorativas", "Espelhos artísticos"],
+      "sensibilidade": "alta",
+      "pode_cortar": true,
+      "pode_furar": false,
+      "ferramentas_recomendadas": ["luvas", "ventosa", "nivel", "trena", "silicone", "bomba-silicone", "alcool-querosene"],
+      "cuidados": [
+        "⚠️ A parte tratada é extremamente sensível a riscos",
+        "Nunca usar materiais abrasivos na limpeza",
+        "Manusear com luvas de algodão para não deixar marcas de dedos",
+        "Transportar sempre na posição vertical",
+        "Usar pano de microfibra apenas para limpeza",
+        "Não aplicar produtos químicos agressivos"
+      ],
+      "cor_badge": "#C4A882"
+    },
+    {
+      "id": "canelado",
+      "nome": "Vidro Canelado",
+      "descricao": "Vidro com ranhuras paralelas que difundem a luz e criam privacidade com efeito visual elegante.",
+      "usos": ["Box de banheiro", "Portas internas", "Divisórias", "Janelas decorativas"],
+      "sensibilidade": "media",
+      "pode_cortar": true,
+      "pode_furar": false,
+      "ferramentas_recomendadas": ["luvas", "diamante", "lixadeira", "lixa", "trena", "silicone", "bomba-silicone"],
+      "cuidados": [
+        "Identificar o lado com ranhuras antes de instalar",
+        "As caneluras acumulam sujeira - limpar com escova macia",
+        "Não usar esponjas abrasivas nas caneluras",
+        "Cortar sempre pelo lado liso"
+      ],
+      "cor_badge": "#6B8FA8"
+    },
+    {
+      "id": "anti-reflexo",
+      "nome": "Vidro Anti-Reflexo",
+      "descricao": "Vidro com tratamento especial que reduz reflexos e brilhos, melhorando a visibilidade.",
+      "usos": ["Quadros e obras de arte", "Vitrines de museus", "Telas e monitores", "Fachadas comerciais"],
+      "sensibilidade": "muito_alta",
+      "pode_cortar": true,
+      "pode_furar": false,
+      "ferramentas_recomendadas": ["luvas", "diamante", "lixa", "trena", "silicone", "bomba-silicone", "alcool-querosene"],
+      "cuidados": [
+        "⚠️ O revestimento anti-reflexo é extremamente delicado",
+        "Nunca usar produtos com amônia ou álcool isopropílico na limpeza",
+        "Usar apenas pano de microfibra seco",
+        "Identificar o lado tratado (lado anti-reflexo)",
+        "Nunca usar lixadeira no lado tratado",
+        "Armazenar com papel protetor entre os vidros"
+      ],
+      "cor_badge": "#9B8EC4"
+    },
+    {
+      "id": "fume",
+      "nome": "Vidro Fumê",
+      "descricao": "Vidro com coloração escura (cinza, bronze ou preto) que reduz a transmissão de luz e calor, garantindo privacidade.",
+      "usos": ["Janelas externas", "Fachadas", "Divisórias", "Portas", "Guarda-corpos"],
+      "sensibilidade": "media",
+      "pode_cortar": true,
+      "pode_furar": true,
+      "ferramentas_recomendadas": ["luvas", "diamante", "lixadeira", "lixa", "trena", "silicone", "bomba-silicone", "alcool-querosene"],
+      "cuidados": [
+        "A coloração é na massa - não risca ao cortar",
+        "Limpar com produtos neutros para manter a tonalidade",
+        "Verificar tonalidade exata com o cliente antes de instalar",
+        "Evitar produtos agressivos que podem alterar a cor"
+      ],
+      "cor_badge": "#4A4A5A"
+    }
+  ],
+  "tipos_instalacao": [
+    {
+      "id": "box",
+      "nome": "Instalação de Box (Blindex)",
+      "icone": "🚿",
+      "descricao": "Instalação de box de vidro temperado em banheiros. Exige precisão nas medidas e atenção especial com o vidro temperado.",
+      "dificuldade": "alta",
+      "ferramentas": ["trena", "nivel", "lixadeira", "furadeira", "parafusadeira", "chave-allen", "silicone", "bomba-silicone", "ventosa", "luvas", "estilete", "roldanas"],
+      "vidros_usados": ["temperado"],
+      "passo_a_passo": [
+        {
+          "passo": 1,
+          "titulo": "Medição do Vão",
+          "descricao": "Use a trena para medir o vão do box. Anote largura, altura e profundidade. Verifique se o vão é perfeitamente retangular - meça os dois lados.",
+          "ferramentas": ["trena", "nivel"],
+          "cuidados": ["Medir em pelo menos 3 pontos de altura para detectar irregularidades na parede", "O vidro temperado deve ser encomendado com as medidas exatas"]
+        },
+        {
+          "passo": 2,
+          "titulo": "Preparação do Kit",
+          "descricao": "Verifique se todos os componentes do kit estão presentes. Corte os perfis metálicos com a lixadeira nas medidas corretas.",
+          "ferramentas": ["lixadeira", "trena"],
+          "cuidados": ["Use EPI ao cortar com lixadeira", "Verifique o prumo dos perfis antes de fixar"]
+        },
+        {
+          "passo": 3,
+          "titulo": "Fixação dos Perfis",
+          "descricao": "Use o nível para garantir que os perfis estejam nivelados. Faça os furos na parede e fixe os perfis com parafusos e buchas.",
+          "ferramentas": ["furadeira", "nivel", "parafusadeira"],
+          "cuidados": ["Verificar se não há encanamentos ou fiações elétricas nos pontos de furo", "Usar buchas adequadas para o tipo de parede"]
+        },
+        {
+          "passo": 4,
+          "titulo": "Instalação do Vidro Temperado",
+          "descricao": "Com a ventosa, posicione o vidro nos perfis. O vidro temperado NUNCA pode ser cortado em obra - deve vir no tamanho exato.",
+          "ferramentas": ["ventosa", "luvas", "chave-allen"],
+          "cuidados": ["⚠️ NUNCA bater nas bordas do vidro temperado", "Usar ventosa sempre - vidro pode pesar 30kg ou mais", "Verificar roldanas antes de deslizar o vidro"]
+        },
+        {
+          "passo": 5,
+          "titulo": "Vedação com Silicone",
+          "descricao": "Aplique silicone neutro nas juntas e bordas. O silicone neutro não corrói o alumínio e não danifica o vidro.",
+          "ferramentas": ["silicone", "bomba-silicone", "estilete"],
+          "cuidados": ["Usar apenas silicone NEUTRO para box", "Molhar o dedo com água para alisar o silicone", "Aguardar 24h para usar o box"]
+        },
+        {
+          "passo": 6,
+          "titulo": "Limpeza Final",
+          "descricao": "Remova excessos de silicone com querosene. Limpe o vidro com álcool e pano macio.",
+          "ferramentas": ["alcool-querosene", "estilete"],
+          "cuidados": ["Não usar esponjas abrasivas", "Remover toda fita protetora do vidro"]
+        }
+      ]
+    },
+    {
+      "id": "espelho",
+      "nome": "Instalação de Espelhos Grandes",
+      "icone": "🪞",
+      "descricao": "Instalação de espelhos em academias, salões e residências. Exige cuidado especial com o peso e fragilidade do espelho.",
+      "dificuldade": "media",
+      "ferramentas": ["lixadeira", "silicone", "bomba-silicone", "calcos", "alcool-querosene", "nivel", "ventosa", "luvas", "trena", "fita-dupla-face"],
+      "vidros_usados": ["incolor", "fosco"],
+      "passo_a_passo": [
+        {
+          "passo": 1,
+          "titulo": "Preparação do Espelho",
+          "descricao": "Lixar as bordas para retirar as partes cortantes. Limpar o espelho com álcool no lado que ficará voltado para a parede.",
+          "ferramentas": ["lixadeira", "luvas", "alcool-querosene"],
+          "cuidados": ["⚠️ Nunca riscar a face espelhada com a lixadeira", "Lixar apenas as bordas", "Limpar toda gordura do verso antes de colar"]
+        },
+        {
+          "passo": 2,
+          "titulo": "Preparação da Parede",
+          "descricao": "Limpar a parede onde o espelho será instalado. Marcar os pontos de instalação com nível.",
+          "ferramentas": ["nivel", "trena"],
+          "cuidados": ["A parede deve estar limpa, seca e livre de gordura", "Verificar se a parede suporta o peso do espelho"]
+        },
+        {
+          "passo": 3,
+          "titulo": "Aplicação do Silicone",
+          "descricao": "Aplique silicone no verso do espelho em pontos distribuídos uniformemente. Não aplique em linha contínua.",
+          "ferramentas": ["silicone", "bomba-silicone"],
+          "cuidados": ["⚠️ Usar silicone ESPECIAL PARA ESPELHO - silicone comum pode manchar", "Distribuir o silicone para evitar pontos de pressão", "Não usar massa - pode quebrar o espelho"]
+        },
+        {
+          "passo": 4,
+          "titulo": "Posicionamento e Fixação",
+          "descricao": "Com ventosa, posicione o espelho na parede. Use calços na base para suporte temporário enquanto o silicone seca.",
+          "ferramentas": ["ventosa", "calcos", "nivel"],
+          "cuidados": ["Usar ventosa para espelhos acima de 5kg", "Os calços DEVEM ser mantidos por pelo menos 24h", "Verificar nivelamento imediatamente após colocar"]
+        },
+        {
+          "passo": 5,
+          "titulo": "Cura e Acabamento",
+          "descricao": "Aguardar 24-48h para a cura total do silicone. Limpar excessos com querosene.",
+          "ferramentas": ["alcool-querosene"],
+          "cuidados": ["Não remover os calços antes da cura completa", "Não exercer força no espelho antes de 48h", "Remover excessos de silicone com estilete cuidadosamente"]
+        }
+      ]
+    },
+    {
+      "id": "janela",
+      "nome": "Instalação de Vidros em Janelas",
+      "icone": "🪟",
+      "descricao": "Substituição ou instalação de vidros em janelas residenciais e comerciais. Inclui remoção de vidros quebrados.",
+      "dificuldade": "media",
+      "ferramentas": ["trena", "diamante", "lixadeira", "lixa", "silicone", "bomba-silicone", "massa", "luvas", "estilete", "alcool-querosene", "martelo"],
+      "vidros_usados": ["incolor", "fosco", "fume", "canelado"],
+      "passo_a_passo": [
+        {
+          "passo": 1,
+          "titulo": "Remoção do Vidro Quebrado",
+          "descricao": "Se necessário, remover o vidro antigo ou quebrado. Cobrir o chão com lona. Com martelo e luvas, remover os cacos cuidadosamente.",
+          "ferramentas": ["martelo", "luvas", "estilete"],
+          "cuidados": ["⚠️ Usar luvas GROSSAS e óculos de proteção", "Trabalhar de cima para baixo", "Retirar primeiro os pedaços grandes com ventosa", "Guardar cacos em caixa resistente para descarte"]
+        },
+        {
+          "passo": 2,
+          "titulo": "Medição do Vão",
+          "descricao": "Medir o vão da janela onde o vidro será instalado. Medir em dois pontos de altura e largura para verificar irregularidades.",
+          "ferramentas": ["trena"],
+          "cuidados": ["Descontar 2-3mm de cada lado para folga de dilatação", "Anotar as medidas e confirmar antes de cortar"]
+        },
+        {
+          "passo": 3,
+          "titulo": "Corte do Vidro",
+          "descricao": "Riscas o vidro com o diamante em superfície plana e almofadada. Aplicar pressão uniforme em uma passada contínua. Quebrar na risca.",
+          "ferramentas": ["diamante", "trena", "luvas"],
+          "cuidados": ["O diamante deve fazer apenas UMA passada - não riscar duas vezes", "Aplicar pressão uniforme do início ao fim", "Quebrar o vidro logo após riscar", "Usar régua metálica como guia"]
+        },
+        {
+          "passo": 4,
+          "titulo": "Acabamento das Bordas",
+          "descricao": "Lixar todas as bordas cortadas com lixadeira ou lixa manual. Usar movimentos em diagonal para não lascar.",
+          "ferramentas": ["lixadeira", "lixa", "luvas"],
+          "cuidados": ["Usar água ao lixar para reduzir pó de vidro", "Usar máscara ao lixar a seco", "Verificar todas as bordas passando suavemente a luva"]
+        },
+        {
+          "passo": 5,
+          "titulo": "Instalação na Janela",
+          "descricao": "Limpar o caixilho. Aplicar silicone ou massa no caixilho e posicionar o vidro. Verificar nivelamento.",
+          "ferramentas": ["silicone", "bomba-silicone", "massa", "nivel", "alcool-querosene"],
+          "cuidados": ["Para vidros comuns, pode usar massa ou silicone", "Para vidros mais sensíveis, SEMPRE usar silicone", "Massa pode quebrar vidros se endurecer demais com pressão", "Deixar 2-3mm de folga nas bordas"]
+        },
+        {
+          "passo": 6,
+          "titulo": "Limpeza e Entrega",
+          "descricao": "Limpar o vidro instalado com álcool e pano de microfibra. Verificar com o cliente antes de finalizar.",
+          "ferramentas": ["alcool-querosene"],
+          "cuidados": ["Não usar esponjas abrasivas", "Circular internamente e externamente", "Mostrar o trabalho finalizado ao cliente"]
+        }
+      ]
+    }
+  ],
+  "cuidados_gerais": [
+    {
+      "id": "corte-seguro",
+      "titulo": "Segurança no Corte",
+      "icone": "⚠️",
+      "tipo": "seguranca",
+      "descricao": "Sempre use luvas, óculos de proteção e máscara ao cortar vidros. O pó de vidro é invisível e perigoso.",
+      "dicas": [
+        "Use luvas de proteção em TODAS as operações com vidro",
+        "Use óculos de proteção ao lixar e cortar",
+        "Use máscara ao lixar vidro a seco",
+        "Trabalhe em superfície estável e almofadada",
+        "Nunca corte vidro com a mão no ar"
+      ]
+    },
+    {
+      "id": "limpeza-correta",
+      "titulo": "Limpeza Sem Arranhar",
+      "icone": "🧹",
+      "tipo": "qualidade",
+      "descricao": "A limpeza incorreta pode arranhar permanentemente o vidro e comprometer a qualidade do serviço.",
+      "dicas": [
+        "Use sempre panos de microfibra ou jornal",
+        "Nunca use esponjas abrasivas (lado verde do Bombril)",
+        "Aplique álcool ou produto neutro - evite agressivos",
+        "Para vidro fosco e jato de areia: use escova macia",
+        "Para silicone curado: querosene com estilete cuidadosamente"
+      ]
+    },
+    {
+      "id": "silicone-vs-massa",
+      "titulo": "Silicone ou Massa?",
+      "icone": "🤔",
+      "tipo": "tecnico",
+      "descricao": "A escolha errada pode quebrar o vidro meses após a instalação.",
+      "dicas": [
+        "⚠️ A MASSA endurece e pode quebrar vidros com o tempo",
+        "Prefira SILICONE para vidros temperados, espelhos e vidros sensíveis",
+        "Silicone é flexível e absorve variações térmicas",
+        "Use silicone NEUTRO para box e alumínio (não corrói)",
+        "Use silicone ESPECIAL para espelhos (não mancha a prata)"
+      ]
+    },
+    {
+      "id": "vidro-temperado-especial",
+      "titulo": "Atenção com Vidro Temperado",
+      "icone": "🔴",
+      "tipo": "critico",
+      "descricao": "O vidro temperado tem regras específicas que, se violadas, resultam em quebra imediata.",
+      "dicas": [
+        "⚠️ JAMAIS tentar cortar vidro temperado - quebrará em fragmentos",
+        "⚠️ JAMAIS furar vidro temperado com broca comum",
+        "⚠️ NUNCA bater nas bordas ou cantos",
+        "Sempre encomendar no tamanho exato",
+        "Usar ventosa para mover - nunca carregue nas bordas",
+        "Verificar bordas antes de instalar - lascas indicam vidro comprometido"
+      ]
+    },
+    {
+      "id": "medidas-precisas",
+      "titulo": "Precisão nas Medidas",
+      "icone": "📏",
+      "tipo": "qualidade",
+      "descricao": "Um erro de medida significa refazer todo o serviço. Meça com calma e precisão.",
+      "dicas": [
+        "Medir sempre em pelo menos 2 pontos diferentes",
+        "Para vãos irregulares, medir no menor ponto",
+        "Descontar 2-3mm de folga para dilatação térmica",
+        "Confirmar as medidas com o cliente antes de cortar",
+        "Anotar as medidas - nunca confie apenas na memória"
+      ]
+    },
+    {
+      "id": "cliente-satisfeito",
+      "titulo": "Excelência no Atendimento",
+      "icone": "⭐",
+      "tipo": "profissional",
+      "descricao": "Um serviço técnico impecável, aliado a um bom atendimento, garante recomendações e retorno do cliente.",
+      "dicas": [
+        "Sempre apresente ao cliente antes e depois do serviço",
+        "Reporte ao cliente qualquer problema encontrado",
+        "Explique o que foi feito e os cuidados necessários",
+        "Limpe completamente o ambiente após o serviço",
+        "Forneça orientações sobre manutenção e limpeza",
+        "Jamais deixe cacos de vidro no local"
+      ]
+    }
+  ]
+}
