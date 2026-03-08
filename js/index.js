@@ -1,0 +1,984 @@
+/* ============================
+   DATA
+============================ */
+let DATA = null;
+
+async function loadData(){
+  try{ const r=await fetch('data.json'); DATA=await r.json(); }
+  catch(e){ console.error('data.json not found',e); DATA={ferramentas:[],tipos_vidro:[],tipos_instalacao:[],cuidados_gerais:[]}; }
+  init();
+}
+
+/* ============================
+   INIT
+============================ */
+function init(){
+  buildNav(); buildFerramentas(); buildVidros();
+  buildInstalacoes(); buildCuidados(); buildMM();
+}
+
+/* ============================
+   NAV
+============================ */
+function buildNav(){
+  document.querySelectorAll('.nav-tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById('tab-'+t.dataset.tab).classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+}
+
+/* ============================
+   FERRAMENTAS
+============================ */
+function buildFerramentas(){
+  const cats=[...new Set(DATA.ferramentas.map(f=>f.categoria))];
+  const bar=document.getElementById('ferrFilter');
+  cats.forEach(c=>{const b=document.createElement('button');b.className='fbtn';b.dataset.cat=c;b.textContent=c;bar.appendChild(b);});
+  bar.addEventListener('click',e=>{const b=e.target.closest('.fbtn');if(!b)return;
+    bar.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+    renderF(b.dataset.cat,document.getElementById('ferrSearch').value);});
+  document.getElementById('ferrSearch').addEventListener('input',e=>{
+    renderF(bar.querySelector('.fbtn.active').dataset.cat,e.target.value);});
+  renderF('todas','');
+}
+function renderF(cat,srch){
+  const f=DATA.ferramentas.filter(f=>(cat==='todas'||f.categoria===cat)&&(!srch||f.nome.toLowerCase().includes(srch.toLowerCase())||f.descricao.toLowerCase().includes(srch.toLowerCase())));
+  document.getElementById('ferrGrid').innerHTML=f.map(f=>`
+    <div class="card click" onclick="openFM('${f.id}')">
+      <div class="ctop"><div class="cicon">${f.icone}</div><div><div class="cname">${f.nome}</div><div class="ccat">${f.categoria}</div></div></div>
+      <div class="cdesc">${f.descricao}</div>
+      <div class="rbadge r-${f.nivel_risco}">${rl(f.nivel_risco)}</div>
+    </div>`).join('');
+}
+function rl(r){return{alto:'⚠ Risco Alto',medio:'◆ Risco Médio',baixo:'✓ Risco Baixo'}[r]||r}
+function openFM(id){
+  const f=DATA.ferramentas.find(x=>x.id===id);if(!f)return;
+  document.getElementById('mhead').innerHTML=`<div style="font-size:1.7rem">${f.icone}</div>
+    <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700">${f.nome}</div>
+    <div style="font-size:.64rem;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase">${f.categoria}</div></div>
+    <button class="mclose" onclick="closeMod()">✕</button>`;
+  document.getElementById('mbody').innerHTML=`
+    <div class="msec"><h4>Descrição</h4><p style="font-size:.86rem;color:var(--text2);line-height:1.6">${f.descricao}</p></div>
+    <div class="msec"><h4>Como Usar</h4><p style="font-size:.86rem;color:var(--text2);line-height:1.6">${f.uso}</p></div>
+    <div class="rbadge r-${f.nivel_risco}">${rl(f.nivel_risco)}</div>`;
+  document.getElementById('moverlay').classList.add('open');
+}
+
+/* ============================
+   VIDROS
+============================ */
+function buildVidros(){
+  const bar=document.getElementById('vidroFilter');
+  bar.addEventListener('click',e=>{const b=e.target.closest('.fbtn');if(!b)return;
+    bar.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderV(b.dataset.sens);});
+  renderV('todas');
+}
+function renderV(sens){
+  const f=DATA.tipos_vidro.filter(v=>sens==='todas'||v.sensibilidade===sens);
+  document.getElementById('vidroGrid').innerHTML=f.map(v=>`
+    <div class="vc" onclick="openVM('${v.id}')">
+      <div class="vchead"><div class="vdot" style="background:${v.cor_badge}"></div>
+        <div class="vname">${v.nome}</div><div class="vsens s-${v.sensibilidade}">${sl(v.sensibilidade)}</div></div>
+      <div class="vcbody">
+        <div class="vdesc">${v.descricao}</div>
+        <div class="vtags">${v.usos.slice(0,3).map(u=>`<span class="vtag">${u}</span>`).join('')}</div>
+        <div class="vacts">
+          <span class="vact ${v.pode_cortar?'can':'cant'}">${v.pode_cortar?'✓ Pode Cortar':'✕ Não Cortar'}</span>
+          <span class="vact ${v.pode_furar?'can':'cant'}">${v.pode_furar?'✓ Pode Furar':'✕ Não Furar'}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function sl(s){return{baixa:'Baixa',media:'Média',alta:'Alta',muito_alta:'Crítico'}[s]||s}
+function openVM(id){
+  const v=DATA.tipos_vidro.find(x=>x.id===id);if(!v)return;
+  const fn=v.ferramentas_recomendadas.map(fid=>{const f=DATA.ferramentas.find(x=>x.id===fid);return f?`<span class="tchip">${f.icone} ${f.nome}</span>`:''}).join('');
+  document.getElementById('mhead').innerHTML=`
+    <div class="vdot" style="background:${v.cor_badge};width:13px;height:13px;border-radius:50%;flex-shrink:0"></div>
+    <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700">${v.nome}</div>
+    <div class="vsens s-${v.sensibilidade}" style="display:inline-block;margin-top:.2rem">${sl(v.sensibilidade)}</div></div>
+    <button class="mclose" onclick="closeMod()">✕</button>`;
+  document.getElementById('mbody').innerHTML=`
+    <div class="msec"><h4>Descrição</h4><p style="font-size:.86rem;color:var(--text2);line-height:1.6">${v.descricao}</p></div>
+    <div class="msec"><h4>Aplicações</h4><div class="tchips">${v.usos.map(u=>`<span class="tchip">${u}</span>`).join('')}</div></div>
+    <div class="msec"><h4>Ferramentas Recomendadas</h4><div class="tchips">${fn}</div></div>
+    <div class="msec"><h4>Cuidados</h4><ul class="clist">${v.cuidados.map(c=>`<li class="${c.includes('⚠️')?'warn':''}">${c}</li>`).join('')}</ul></div>
+    <div style="display:flex;gap:.35rem;flex-wrap:wrap">
+      <span class="vact ${v.pode_cortar?'can':'cant'}">${v.pode_cortar?'✓ Pode Cortar':'✕ Não Cortar'}</span>
+      <span class="vact ${v.pode_furar?'can':'cant'}">${v.pode_furar?'✓ Pode Furar':'✕ Não Furar'}</span>
+    </div>`;
+  document.getElementById('moverlay').classList.add('open');
+}
+function closeMod(){document.getElementById('moverlay').classList.remove('open')}
+document.getElementById('moverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeMod()});
+
+/* ============================
+   SIMULAÇÃO
+============================ */
+function buildInstalacoes(){
+  document.getElementById('installGrid').innerHTML=DATA.tipos_instalacao.map(i=>`
+    <div class="icard" onclick="startSim('${i.id}')">
+      <div class="iico">${i.icone}</div><div class="inm">${i.nome}</div>
+      <div class="idsc">${i.descricao}</div>
+      <span class="idiff d-${i.dificuldade}">Dificuldade: ${i.dificuldade}</span>
+    </div>`).join('');
+}
+let sData=null,sStep=0;
+function startSim(id){
+  sData=DATA.tipos_instalacao.find(x=>x.id===id);sStep=0;
+  document.getElementById('installList').style.display='none';
+  const c=document.getElementById('simContainer');c.classList.add('on');renderSim();
+}
+function renderSim(){
+  const c=document.getElementById('simContainer');
+  const tot=sData.passo_a_passo.length;const s=sData.passo_a_passo[sStep];
+  const pct=Math.round((sStep/tot)*100);
+  const ft=(s.ferramentas||[]).map(fid=>{const f=DATA.ferramentas.find(x=>x.id===fid);return f?`<div class="stool">${f.icone} ${f.nome}</div>`:''}).join('');
+  const cr=(s.cuidados||[]).map(c=>`<div class="scare ${c.includes('⚠️')?'iw':''}">${c}</div>`).join('');
+  c.innerHTML=`
+    <div class="simhdr"><button class="sback" onclick="backToList()">← Voltar</button>
+      <div class="stitle">${sData.icone} ${sData.nome}</div></div>
+    <div class="spbar"><div class="pbar"><div class="pfill" style="width:${pct}%"></div></div>
+      <div class="ptxt">Passo ${sStep+1} / ${tot}</div></div>
+    <div class="scard">
+      <div class="schead"><div class="scnum">0${s.passo}</div><div class="sctit">${s.titulo}</div></div>
+      <div class="scbody">
+        <div class="scdesc">${s.descricao}</div>
+        <div class="sccols">
+          <div><div class="scsubt">🔧 Ferramentas</div>${ft||'<div class="stool" style="color:var(--text3)">Nenhuma específica</div>'}</div>
+          <div><div class="scsubt">⚠️ Cuidados</div>${cr||'<div class="scare" style="color:var(--text3)">Nenhum especial</div>'}</div>
+        </div>
+      </div>
+    </div>
+    <div class="snav">
+      <button class="sbtn sbtn-p" onclick="prevSt()" ${sStep===0?'disabled':''}>← Anterior</button>
+      ${sStep<tot-1?`<button class="sbtn sbtn-n" onclick="nextSt()">Próximo →</button>`:`<button class="sbtn sbtn-n" onclick="finSim()" style="background:var(--success)">✓ Concluir</button>`}
+    </div>`;
+}
+function nextSt(){sStep++;renderSim();window.scrollTo({top:180,behavior:'smooth'})}
+function prevSt(){sStep--;renderSim();window.scrollTo({top:180,behavior:'smooth'})}
+function finSim(){
+  document.getElementById('simContainer').innerHTML=`
+    <div class="simhdr"><button class="sback" onclick="backToList()">← Voltar</button></div>
+    <div class="scomplete"><h3>✓ CONCLUÍDO</h3>
+      <p>${sData.nome} finalizado!<br>Faça a limpeza final e obtenha o feedback do cliente.</p>
+      <button class="sbtn sbtn-n" onclick="backToList()">Ver outras instalações</button></div>`;
+  window.scrollTo({top:180,behavior:'smooth'});
+}
+function backToList(){
+  document.getElementById('installList').style.display='block';
+  const c=document.getElementById('simContainer');c.classList.remove('on');c.innerHTML='';
+  sData=null;sStep=0;
+}
+
+/* ============================
+   CUIDADOS
+============================ */
+function buildCuidados(){
+  document.getElementById('cuidadosGrid').innerHTML=DATA.cuidados_gerais.map(c=>`
+    <div class="ccrd t-${c.tipo}">
+      <div class="ctop2"><div class="cico">${c.icone}</div>
+        <div><div class="ctit">${c.titulo}</div><div class="ctipo">${c.tipo}</div></div></div>
+      <div class="cdsc">${c.descricao}</div>
+      <ul class="ctips">${c.dicas.map(d=>`<li>${d}</li>`).join('')}</ul>
+    </div>`).join('');
+}
+
+/* ============================
+   MÃO NA MASSA — SVG HELPERS
+============================ */
+// Shared tile wall helper
+function tileWall(W,H,tw,th,c1,c2,grout){
+  let s='';
+  for(let x=0;x<W;x+=tw+1)for(let y=0;y<H;y+=th+1)
+    s+=`<rect x="${x}" y="${y}" width="${tw}" height="${th}" fill="${(Math.floor(x/(tw+1))+Math.floor(y/(th+1)))%2===0?c1:c2}"/>`;
+  return s;
+}
+function marble(id){
+  return `<defs><filter id="nz${id}"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/></filter>
+  <linearGradient id="mb${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#d8dde8"/><stop offset="40%" stop-color="#c8cdd8"/><stop offset="70%" stop-color="#bfc4cf"/><stop offset="100%" stop-color="#c5cad5"/></linearGradient></defs>`;
+}
+function checkBadge(x,y){
+  return `<circle cx="${x}" cy="${y}" r="13" fill="rgba(63,185,80,0.25)" stroke="#3fb950" stroke-width="1.5"/>
+  <text x="${x}" y="${y+5}" text-anchor="middle" font-size="12" font-weight="bold" fill="#3fb950">✓</text>`;
+}
+function label(txt,y='98%'){
+  return `<text x="50%" y="${y}" text-anchor="middle" font-size="7.5" fill="#8b949e" font-family="'Barlow Condensed',sans-serif" letter-spacing="0.5">${txt}</text>`;
+}
+// Glass panel helper (realistic glass look)
+function glassPanel(x,y,w,h,done,col='rgba(200,230,255,'){
+  const op=done?'0.18':'0.05';
+  const str=done?'rgba(180,220,255,0.5)':'rgba(88,166,255,0.2)';
+  const sh=done?`<line x1="${x+w*0.2}" y1="${y}" x2="${x+w*0.15}" y2="${y+h}" stroke="rgba(255,255,255,0.12)" stroke-width="${w*0.12}"/>
+   <line x1="${x+w*0.6}" y1="${y}" x2="${x+w*0.55}" y2="${y+h}" stroke="rgba(255,255,255,0.07)" stroke-width="${w*0.08}"/>`:'';
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${col}${op})" stroke="${str}" stroke-width="1"/>
+  ${sh}`;
+}
+// Chrome fixture
+function chromeHandle(x,y,ver=true){
+  if(ver) return `<rect x="${x-2}" y="${y}" width="4" height="22" rx="2" fill="url(#chr)" stroke="#aaa" stroke-width="0.5"/>`;
+  return `<rect x="${x}" y="${y-2}" width="22" height="4" rx="2" fill="url(#chr)" stroke="#aaa" stroke-width="0.5"/>`;
+}
+function chromeDefs(){
+  return `<linearGradient id="chr" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#bbb"/><stop offset="40%" stop-color="#eee"/><stop offset="100%" stop-color="#aaa"/></linearGradient>`;
+}
+// Shower head
+function showerHead(x,y,done){
+  if(!done) return '';
+  return `<rect x="${x-8}" y="${y-2}" width="16" height="5" rx="2" fill="#ccc" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="${x}" y1="${y+3}" x2="${x}" y2="${y+18}" stroke="#bbb" stroke-width="1.5"/>
+  ${done?`<line x1="${x-5}" y1="${y+14}" x2="${x+5}" y2="${y+20}" stroke="rgba(150,200,255,0.4)" stroke-width="0.8"/>
+  <line x1="${x-3}" y1="${y+16}" x2="${x+3}" y2="${y+22}" stroke="rgba(150,200,255,0.3)" stroke-width="0.8"/>`:''}`
+}
+
+/* ─── BOX DESLIZANTE (porta de correr, perfil preto) ─── */
+function svgBoxDeslizante(done){
+  const W=360,H=220;
+  const wall='#c8cbc4', tile1='#d2d5ce', tile2='#cacdc7', grout='#b8bab5';
+  const floor1='#ddd', frameCol='#1a1a1a';
+  const gx=60, gy=18, gw=240, gh=168, panW=118;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>${chromeDefs()}
+  <linearGradient id="wallGrd" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d0d3cc"/><stop offset="100%" stop-color="#c4c7c0"/></linearGradient>
+  <linearGradient id="floorGrd" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dfe0dc"/><stop offset="100%" stop-color="#d2d3cf"/></linearGradient>
+  </defs>
+  <!-- wall bg -->
+  <rect width="${W}" height="${H}" fill="url(#wallGrd)"/>
+  <!-- tiles -->
+  ${tileWall(W,180,59,44,'#cdd0c9','#c6c9c2','#b5b8b1')}
+  <!-- floor -->
+  <rect x="0" y="188" width="${W}" height="${H-188}" fill="url(#floorGrd)"/>
+  ${tileWall(0,188,W,H-188,59,16,'#d8dad6','#d0d2ce','#c8cac6')}
+  <!-- shower floor tray -->
+  <rect x="${gx}" y="${gy+gh}" width="${gw}" height="14" rx="2" fill="#d0d2ce" stroke="#bbbdb9" stroke-width="1"/>
+  <ellipse cx="${gx+gw/2}" cy="${gy+gh+7}" rx="9" ry="5" fill="#c0c2be" stroke="#aaa" stroke-width="0.8"/>
+  <!-- outer frame top + sides (black) -->
+  <rect x="${gx}" y="${gy}" width="${gw}" height="4" fill="${done?frameCol:'#555'}"/>
+  <rect x="${gx}" y="${gy}" width="4" height="${gh}" fill="${done?frameCol:'#555'}"/>
+  <rect x="${gx+gw-4}" y="${gy}" width="4" height="${gh}" fill="${done?frameCol:'#555'}"/>
+  <!-- bottom rail -->
+  <rect x="${gx}" y="${gy+gh-3}" width="${gw}" height="5" rx="1" fill="${done?frameCol:'#555'}"/>
+  <!-- Glass panels -->
+  ${done ? glassPanel(gx+4, gy+4, panW, gh-7, true) : `<rect x="${gx+4}" y="${gy+4}" width="${panW}" height="${gh-7}" fill="rgba(180,200,180,0.08)" stroke="rgba(88,166,255,0.2)" stroke-width="1" stroke-dasharray="5 3"/>`}
+  ${done ? glassPanel(gx+gw-4-panW, gy+4, panW, gh-7, true) : `<rect x="${gx+gw-4-panW}" y="${gy+4}" width="${panW}" height="${gh-7}" fill="rgba(180,200,180,0.08)" stroke="rgba(88,166,255,0.2)" stroke-width="1" stroke-dasharray="5 3"/>`}
+  <!-- center sliding overlap line -->
+  ${done?`<line x1="${gx+gw/2}" y1="${gy+4}" x2="${gx+gw/2}" y2="${gy+gh-3}" stroke="${frameCol}" stroke-width="2.5"/>`:''}
+  <!-- handles -->
+  ${done?`${chromeHandle(gx+gw/2-8,gy+gh/2-11)}${chromeHandle(gx+gw/2+8,gy+gh/2-11)}`:''}
+  <!-- shelf + products inside -->
+  ${done?`<rect x="${gx+50}" y="${gy+70}" width="60" height="3" rx="1" fill="rgba(200,220,255,0.4)" stroke="rgba(180,210,255,0.6)" stroke-width="0.5"/>
+  <rect x="${gx+60}" y="${gy+52}" width="8" height="18" rx="2" fill="rgba(100,160,220,0.7)"/>
+  <rect x="${gx+72}" y="${gy+55}" width="7" height="15" rx="2" fill="rgba(120,140,200,0.6)"/>
+  <!-- shower system visible through glass -->
+  <line x1="${gx+180}" y1="${gy+10}" x2="${gx+180}" y2="${gy+80}" stroke="rgba(180,180,180,0.5)" stroke-width="2"/>
+  <rect x="${gx+172}" y="${gy+12}" width="16" height="6" rx="1" fill="rgba(200,200,200,0.5)"/>
+  <rect x="${gx+168}" y="${gy+50}" width="10" height="14" rx="1" fill="rgba(160,160,160,0.4)"/>
+  <!-- water shimmer -->
+  <circle cx="${gx+90}" cy="${gy+100}" r="2" fill="rgba(150,200,255,0.3)"/>
+  <circle cx="${gx+140}" cy="${gy+130}" r="1.5" fill="rgba(150,200,255,0.25)"/>
+  ${checkBadge(W-25,22)}`
+  :`<text x="${W/2}" y="${H/2+4}" text-anchor="middle" font-size="9" fill="#999" font-family="sans-serif">Banheiro aguardando box</text>`}
+  <!-- window inside bathroom -->
+  ${done?`<rect x="${gx-48}" y="${gy+20}" width="34" height="50" rx="2" fill="#1a3a5c" stroke="#333" stroke-width="1.5"/>
+  <line x1="${gx-31}" y1="${gy+20}" x2="${gx-31}" y2="${gy+70}" stroke="#333" stroke-width="1"/>
+  <line x1="${gx-48}" y1="${gy+45}" x2="${gx-14}" y2="${gy+45}" stroke="#333" stroke-width="1"/>
+  <rect x="${gx-48}" y="${gy+20}" width="34" height="50" fill="rgba(100,160,220,0.07)"/>`:''}
+  ${label(done?'Box deslizante instalado ✓ (perfil preto)':'Box deslizante — aguardando instalação','97%')}
+  </svg>`;
+}
+
+/* ─── BOX CANTO (L, perfil prata/inox, imagem 2) ─── */
+function svgBoxCanto(done){
+  const W=360,H=220;
+  const frameCol=done?'#c8c8c8':'#555';
+  const gx=80,gy=15,gw=200,gh=170;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>${chromeDefs()}
+  <linearGradient id="wh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8eaeb"/><stop offset="100%" stop-color="#d8dadb"/></linearGradient>
+  </defs>
+  <!-- white bathroom walls -->
+  <rect width="${W}" height="${H}" fill="url(#wh)"/>
+  ${tileWall(0,0,W,185,59,44,'#e4e6e7','#dcdee0','#cccecf')}
+  <!-- floor white -->
+  <rect x="0" y="185" width="${W}" height="${H-185}" fill="#dfe0de"/>
+  <!-- drain -->
+  <ellipse cx="${gx+gw/2}" cy="${gy+gh+8}" rx="8" ry="4" fill="#c8c8c6" stroke="#aaa" stroke-width="0.8"/>
+  <!-- box canto: back panel (fixed) -->
+  ${done?glassPanel(gx,gy,gw*0.55,gh,true):`<rect x="${gx}" y="${gy}" width="${gx+gw*0.55}" height="${gh}" fill="none" stroke="rgba(88,166,255,0.15)" stroke-width="1" stroke-dasharray="4 3"/>`}
+  <!-- side fixed panel -->
+  ${done?glassPanel(gx+gw*0.55-2,gy,gw*0.46,gh,true):`<rect x="${gx+gw*0.55}" y="${gy}" width="${gw*0.46}" height="${gh}" fill="none" stroke="rgba(88,166,255,0.15)" stroke-width="1" stroke-dasharray="4 3"/>`}
+  <!-- frames -->
+  ${done?`
+  <rect x="${gx}" y="${gy}" width="3" height="${gh}" fill="${frameCol}"/>
+  <rect x="${gx+gw*0.55-2}" y="${gy}" width="3" height="${gh}" fill="${frameCol}"/>
+  <rect x="${gx+gw-2}" y="${gy}" width="3" height="${gh}" fill="${frameCol}"/>
+  <rect x="${gx}" y="${gy}" width="${gw}" height="3" fill="${frameCol}"/>
+  <rect x="${gx}" y="${gy+gh-2}" width="${gw}" height="3" fill="${frameCol}"/>
+  <!-- door handle -->
+  ${chromeHandle(gx+gw*0.55+12, gy+gh/2-11)}
+  <!-- ceiling light reflection -->
+  <ellipse cx="${gx+gw*0.3}" cy="${gy+20}" rx="18" ry="6" fill="rgba(255,255,255,0.18)"/>
+  <ellipse cx="${gx+gw*0.75}" cy="${gy+20}" rx="12" ry="4" fill="rgba(255,255,255,0.14)"/>
+  <!-- inside: shelf + products -->
+  <rect x="${gx+30}" y="${gy+90}" width="55" height="3" rx="1" fill="rgba(200,220,255,0.35)" stroke="rgba(180,210,255,0.5)" stroke-width="0.5"/>
+  <rect x="${gx+38}" y="${gy+72}" width="8" height="18" rx="2" fill="rgba(120,90,160,0.6)"/>
+  <rect x="${gx+50}" y="${gy+76}" width="6" height="14" rx="2" fill="rgba(100,100,180,0.5)"/>
+  <!-- shower system -->
+  <line x1="${gx+160}" y1="${gy+8}" x2="${gx+160}" y2="${gy+80}" stroke="rgba(150,150,150,0.5)" stroke-width="2"/>
+  <rect x="${gx+152}" y="${gy+10}" width="16" height="5" rx="1" fill="rgba(180,180,180,0.5)"/>
+  ${checkBadge(W-25,22)}`
+  :`<text x="${W/2}" y="${H/2+4}" text-anchor="middle" font-size="9" fill="#999" font-family="sans-serif">Banheiro aguardando box</text>`}
+  <!-- wash basin suggestion on side -->
+  ${done?`<rect x="4" y="120" width="52" height="36" rx="4" fill="#e0e2e0" stroke="#ccc" stroke-width="1"/>
+  <ellipse cx="30" cy="138" rx="18" ry="12" fill="#d4d6d4" stroke="#bbb" stroke-width="0.8"/>
+  <rect x="26" y="108" width="8" height="14" rx="2" fill="#c0c0c0" stroke="#aaa" stroke-width="0.5"/>`:''}
+  ${label(done?'Box de canto instalado ✓ (perfil inox)':'Box de canto — aguardando instalação','97%')}
+  </svg>`;
+}
+
+/* ─── BOX FRAMELESS (sem perfis, ferragens pontuais, imagem 3) ─── */
+function svgBoxFrameless(done){
+  const W=360,H=220;
+  const gx=55,gy=12,gh=172;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>${chromeDefs()}
+  <linearGradient id="wfw" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e9eaeb"/><stop offset="100%" stop-color="#d8d9da"/></linearGradient>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#wfw)"/>
+  ${tileWall(0,0,W,185,79,59,'#e2e4e5','#d8dadb','#cccdce')}
+  <rect x="0" y="185" width="${W}" height="${H-185}" fill="#ddd"/>
+  <!-- drain in center -->
+  <ellipse cx="${W/2}" cy="${gy+gh+8}" rx="9" ry="5" fill="#c5c5c3" stroke="#aaa" stroke-width="0.8"/>
+  <!-- Two separate door panels meeting in center (frameless) -->
+  ${done?`
+  ${glassPanel(gx, gy, 115, gh, true)}
+  ${glassPanel(gx+120, gy, 115, gh, true)}
+  <!-- center gap (frameless meeting point) -->
+  <line x1="${gx+115}" y1="${gy}" x2="${gx+115}" y2="${gy+gh}" stroke="rgba(200,230,255,0.4)" stroke-width="0.8"/>
+  <!-- chrome round hinges (spider fittings) -->
+  <circle cx="${gx+3}" cy="${gy+gh*0.3}" r="5" fill="url(#chr)" stroke="#aaa" stroke-width="0.8"/>
+  <circle cx="${gx+3}" cy="${gy+gh*0.7}" r="5" fill="url(#chr)" stroke="#aaa" stroke-width="0.8"/>
+  <circle cx="${gx+230}" cy="${gy+gh*0.3}" r="5" fill="url(#chr)" stroke="#aaa" stroke-width="0.8"/>
+  <circle cx="${gx+230}" cy="${gy+gh*0.7}" r="5" fill="url(#chr)" stroke="#aaa" stroke-width="0.8"/>
+  <!-- long bar handles -->
+  <rect x="${gx+100}" y="${gy+gh*0.35}" width="5" height="50" rx="2.5" fill="url(#chr)" stroke="#aaa" stroke-width="0.5"/>
+  <rect x="${gx+123}" y="${gy+gh*0.35}" width="5" height="50" rx="2.5" fill="url(#chr)" stroke="#aaa" stroke-width="0.5"/>
+  <!-- two shower heads -->
+  <rect x="${gx+20}" y="${gy+5}" width="22" height="6" rx="2" fill="#c8c8c8" stroke="#aaa" stroke-width="0.5"/>
+  <rect x="${gx+160}" y="${gy+5}" width="22" height="6" rx="2" fill="#c8c8c8" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="${gx+31}" y1="${gy+11}" x2="${gx+31}" y2="${gy+35}" stroke="#bbb" stroke-width="1.5"/>
+  <line x1="${gx+171}" y1="${gy+11}" x2="${gx+171}" y2="${gy+35}" stroke="#bbb" stroke-width="1.5"/>
+  <!-- wall controls -->
+  <rect x="${gx+80}" y="${gy+90}" width="10" height="14" rx="1" fill="rgba(150,150,150,0.4)"/>
+  <rect x="${gx+80}" y="${gy+108}" width="10" height="14" rx="1" fill="rgba(150,150,150,0.4)"/>
+  <rect x="${gx+160}" y="${gy+90}" width="10" height="14" rx="1" fill="rgba(150,150,150,0.4)"/>
+  <!-- niche inside -->
+  <rect x="${gx+93}" y="${gy+55}" width="44" height="22" rx="1" fill="rgba(200,210,215,0.3)" stroke="rgba(180,195,200,0.4)" stroke-width="0.8"/>
+  ${checkBadge(W-25,22)}`
+  :`<text x="${W/2}" y="${H/2+4}" text-anchor="middle" font-size="9" fill="#999" font-family="sans-serif">Banheiro aguardando box</text>
+  <!-- dashed outline -->
+  <rect x="${gx}" y="${gy}" width="115" height="${gh}" fill="none" stroke="rgba(88,166,255,0.18)" stroke-width="1" stroke-dasharray="5 3"/>
+  <rect x="${gx+120}" y="${gy}" width="115" height="${gh}" fill="none" stroke="rgba(88,166,255,0.18)" stroke-width="1" stroke-dasharray="5 3"/>`}
+  ${label(done?'Box frameless instalado ✓ (sem perfis, ferragens pontuais)':'Box frameless — aguardando instalação','97%')}
+  </svg>`;
+}
+
+/* ─── BOX PERFIL PRETO LUXO (imagem 4, mármore) ─── */
+function svgBoxPretoLuxo(done){
+  const W=360,H=220;
+  const frameCol=done?'#111':'#444';
+  const gx=60,gy=10,gw=230,gh=170;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>${chromeDefs()}
+  ${marble('lux')}
+  <linearGradient id="mblx" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#d8dde4"/><stop offset="30%" stop-color="#c8ced8"/><stop offset="60%" stop-color="#bfc5cf"/><stop offset="100%" stop-color="#c2c8d2"/></linearGradient>
+  </defs>
+  <!-- marble wall -->
+  <rect width="${W}" height="${H}" fill="url(#mblx)"/>
+  <!-- marble veins subtle -->
+  <path d="M20,40 Q80,60 100,120 Q130,180 160,200" stroke="rgba(255,255,255,0.18)" stroke-width="2.5" fill="none"/>
+  <path d="M200,10 Q230,80 220,140 Q210,190 240,220" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
+  <path d="M280,50 Q310,100 290,160" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/>
+  <!-- floor -->
+  <rect x="0" y="188" width="${W}" height="${H-188}" fill="#d0d4da"/>
+  <!-- bathtub corner -->
+  ${done?`<rect x="4" y="140" width="48" height="48" rx="3" fill="#e2e4e8" stroke="#c8cacf" stroke-width="1"/>
+  <rect x="8" y="144" width="40" height="40" rx="2" fill="#d5d8de" stroke="#bbbec4" stroke-width="0.8"/>`:''}
+  <!-- large frame box (all black) -->
+  <!-- back wall glass -->
+  ${done?glassPanel(gx,gy,gw*0.58,gh,true):`<rect x="${gx}" y="${gy}" width="${gw*0.58}" height="${gh}" fill="none" stroke="rgba(100,100,100,0.2)" stroke-width="1" stroke-dasharray="5 3"/>`}
+  ${done?glassPanel(gx+gw*0.58,gy,gw*0.42,gh,true):`<rect x="${gx+gw*0.58}" y="${gy}" width="${gw*0.42}" height="${gh}" fill="none" stroke="rgba(100,100,100,0.2)" stroke-width="1" stroke-dasharray="5 3"/>`}
+  <!-- black frames all around -->
+  ${done?`
+  <rect x="${gx}" y="${gy}" width="${gw}" height="4" fill="${frameCol}"/>
+  <rect x="${gx}" y="${gy+gh-3}" width="${gw}" height="4" fill="${frameCol}"/>
+  <rect x="${gx}" y="${gy}" width="4" height="${gh}" fill="${frameCol}"/>
+  <rect x="${gx+gw-3}" y="${gy}" width="4" height="${gh}" fill="${frameCol}"/>
+  <!-- vertical divider -->
+  <rect x="${gx+gw*0.58-2}" y="${gy}" width="4" height="${gh}" fill="${frameCol}"/>
+  <!-- black handle -->
+  <rect x="${gx+gw*0.58+8}" y="${gy+gh*0.35}" width="5" height="42" rx="2.5" fill="#1a1a1a" stroke="#333" stroke-width="0.5"/>
+  <!-- inside: ceiling shower, marble wall -->
+  <rect x="${gx+20}" y="${gy+4}" width="24" height="7" rx="2" fill="#333"/>
+  <line x1="${gx+32}" y1="${gy+11}" x2="${gx+32}" y2="${gy+30}" stroke="#444" stroke-width="1.5"/>
+  <!-- niche -->
+  <rect x="${gx+40}" y="${gy+75}" width="55" height="25" rx="1" fill="rgba(180,190,200,0.25)" stroke="rgba(160,170,180,0.35)" stroke-width="0.8"/>
+  <rect x="${gx+48}" y="${gy+80}" width="9" height="16" rx="2" fill="rgba(180,80,80,0.5)"/>
+  <rect x="${gx+60}" y="${gy+82}" width="8" height="14" rx="2" fill="rgba(80,120,180,0.45)"/>
+  <!-- window inside -->
+  <rect x="${gx+120}" y="${gy+8}" width="42" height="36" rx="2" fill="#1a3a5c" stroke="${frameCol}" stroke-width="2"/>
+  <line x1="${gx+141}" y1="${gy+8}" x2="${gx+141}" y2="${gy+44}" stroke="${frameCol}" stroke-width="1.5"/>
+  <line x1="${gx+120}" y1="${gy+26}" x2="${gx+162}" y2="${gy+26}" stroke="${frameCol}" stroke-width="1.5"/>
+  <rect x="${gx+120}" y="${gy+8}" width="42" height="36" fill="rgba(100,160,220,0.08)"/>
+  ${checkBadge(W-25,22)}`
+  :`<text x="${W/2}" y="${H/2+4}" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">Banheiro de luxo — aguardando box</text>`}
+  ${label(done?'Box perfil preto luxo instalado ✓ (mármore)':'Box perfil preto — parede de mármore','97%')}
+  </svg>`;
+}
+
+/* ─── BOX VIDRO TOTAL (sem rodapé, imagem 5) ─── */
+function svgBoxVidroTotal(done){
+  const W=360,H=220;
+  const gx=55,gy=12,gw=250,gh=174;
+  const frameCol=done?'#a8aab0':'#444';
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>${chromeDefs()}
+  <linearGradient id="wvt" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#d5d9e0"/><stop offset="50%" stop-color="#c8ccd3"/><stop offset="100%" stop-color="#cdd1d8"/></linearGradient>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#wvt)"/>
+  <!-- marble veins -->
+  <path d="M0,60 Q60,80 80,150 Q100,200 130,220" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/>
+  <path d="M180,0 Q200,70 195,130 Q190,190 220,220" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
+  <!-- floor -->
+  <rect x="0" y="186" width="${W}" height="${H-186}" fill="#ccc"/>
+  <!-- drain -->
+  <ellipse cx="${gx+gw*0.5}" cy="${gy+gh+8}" rx="9" ry="5" fill="#b8b8b6" stroke="#999" stroke-width="0.8"/>
+  <!-- large front glass panel -->
+  ${done?glassPanel(gx,gy,gw*0.52,gh,true):`<rect x="${gx}" y="${gy}" width="${gw*0.52}" height="${gh}" fill="none" stroke="rgba(88,166,255,0.15)" stroke-width="1" stroke-dasharray="4 3"/>`}
+  <!-- side return glass -->
+  ${done?glassPanel(gx+gw*0.52,gy,gw*0.48,gh,true):`<rect x="${gx+gw*0.52}" y="${gy}" width="${gw*0.48}" height="${gh}" fill="none" stroke="rgba(88,166,255,0.15)" stroke-width="1" stroke-dasharray="4 3"/>`}
+  <!-- slim inox frames -->
+  ${done?`
+  <rect x="${gx}" y="${gy}" width="3" height="${gh}" fill="${frameCol}"/>
+  <rect x="${gx+gw-2}" y="${gy}" width="3" height="${gh}" fill="${frameCol}"/>
+  <rect x="${gx}" y="${gy}" width="${gw}" height="3" fill="${frameCol}"/>
+  <rect x="${gx}" y="${gy+gh-2}" width="${gw}" height="3" fill="${frameCol}"/>
+  <rect x="${gx+gw*0.52-1}" y="${gy}" width="3" height="${gh}" fill="${frameCol}"/>
+  <!-- handle bar (inox long) -->
+  <rect x="${gx+gw*0.45}" y="${gy+gh*0.3}" width="5" height="58" rx="2.5" fill="url(#chr)" stroke="#aaa" stroke-width="0.5"/>
+  <!-- skylight suggestion (natural light from above) -->
+  <rect x="${gx+80}" y="${gy+2}" width="80" height="12" rx="2" fill="rgba(255,255,255,0.22)"/>
+  <!-- inside: wall controls + shower -->
+  <rect x="${gx+180}" y="${gy+80}" width="10" height="14" rx="1" fill="rgba(140,140,140,0.4)"/>
+  <rect x="${gx+180}" y="${gy+98}" width="10" height="14" rx="1" fill="rgba(140,140,140,0.4)"/>
+  <!-- bathtub side -->
+  <rect x="${gx+gw+8}" y="${gy+80}" width="55" height="48" rx="3" fill="#dfe0de" stroke="#ccc" stroke-width="1"/>
+  <rect x="${gx+gw+12}" y="${gy+84}" width="47" height="40" rx="2" fill="#d5d6d4"/>
+  ${checkBadge(W-25,22)}`
+  :`<text x="${W/2}" y="${H/2+4}" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">Banheiro aguardando box</text>`}
+  ${label(done?'Box vidro total instalado ✓ (perfil slim inox)':'Box vidro total — aguardando instalação','97%')}
+  </svg>`;
+}
+
+/* ─── BOX VIDRO FOSCO (imagem 6, azulejo branco simples) ─── */
+function svgBoxFosco(done){
+  const W=360,H=220;
+  const gx=60,gy=12,gw=200,gh=168;
+  const frameCol=done?'#e0e2e0':'#555';
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>${chromeDefs()}
+  </defs>
+  <!-- white ceramic tiles -->
+  <rect width="${W}" height="${H}" fill="#e8eae8"/>
+  ${tileWall(0,0,W,185,44,44,'#e4e6e4','#dcdede','#d0d2d0')}
+  <!-- floor tiles (different size) -->
+  <rect x="0" y="185" width="${W}" height="${H-185}" fill="#dfe0de"/>
+  ${tileWall(0,185,W,H-185,29,16,'#dcdedd','#d5d6d5','#cccccb')}
+  <!-- toilet (right side) -->
+  ${done?`<ellipse cx="${W-35}" cy="170" rx="22" ry="14" fill="#e5e6e4" stroke="#ccc" stroke-width="1"/>
+  <rect x="${W-56}" y="130" width="44" height="42" rx="4" fill="#e8e9e7" stroke="#ccc" stroke-width="1"/>
+  <rect x="${W-54}" y="106" width="40" height="26" rx="3" fill="#e0e1df" stroke="#ccc" stroke-width="1"/>`:''}
+  <!-- side wash basin (left) -->
+  ${done?`<rect x="6" y="140" width="46" height="30" rx="3" fill="#e5e6e4" stroke="#ccc" stroke-width="1"/>
+  <ellipse cx="29" cy="155" rx="16" ry="10" fill="#dcdde0" stroke="#bbb" stroke-width="0.8"/>
+  <rect x="25" y="128" width="8" height="14" rx="2" fill="#c8c8c8" stroke="#aaa" stroke-width="0.5"/>`:''}
+  <!-- drain in shower -->
+  <ellipse cx="${gx+gw/2}" cy="${gy+gh+8}" rx="8" ry="4" fill="#c0c2c0" stroke="#aaa" stroke-width="0.8"/>
+  <!-- frosted glass box (green-ish tint like in photo) -->
+  ${done?`
+  <rect x="${gx}" y="${gy}" width="${gw}" height="${gh}" fill="rgba(180,210,190,0.28)" stroke="${frameCol}" stroke-width="2.5"/>
+  <!-- frosted effect — horizontal blur lines -->
+  ${Array.from({length:14},(_,i)=>`<rect x="${gx+1}" y="${gy+1+i*12}" width="${gw-2}" height="10" fill="rgba(200,225,210,${0.04+i*0.005})"/>`).join('')}
+  <!-- white top rail -->
+  <rect x="${gx}" y="${gy}" width="${gw}" height="5" fill="${frameCol}"/>
+  <rect x="${gx}" y="${gy+gh-4}" width="${gw}" height="5" fill="${frameCol}"/>
+  <rect x="${gx}" y="${gy}" width="4" height="${gh}" fill="${frameCol}"/>
+  <rect x="${gx+gw-3}" y="${gy}" width="4" height="${gh}" fill="${frameCol}"/>
+  <!-- center divider (sliding) -->
+  <rect x="${gx+gw/2-1.5}" y="${gy}" width="3" height="${gh}" fill="${frameCol}"/>
+  <!-- chrome handles -->
+  ${chromeHandle(gx+gw/2-10, gy+gh/2-11)}
+  ${chromeHandle(gx+gw/2+10, gy+gh/2-11)}
+  <!-- small decorative stickers (like in photo) -->
+  <circle cx="${gx+gw*0.42}" cy="${gy+40}" r="3" fill="rgba(220,80,80,0.5)"/>
+  <circle cx="${gx+gw*0.47}" cy="${gy+37}" r="2.5" fill="rgba(220,80,80,0.4)"/>
+  <circle cx="${gx+gw*0.52}" cy="${gy+40}" r="3" fill="rgba(220,100,80,0.45)"/>
+  <!-- inside niche -->
+  <rect x="${gx+60}" y="${gy+60}" width="55" height="22" rx="1" fill="rgba(220,235,225,0.35)" stroke="rgba(180,200,185,0.4)" stroke-width="0.8"/>
+  ${checkBadge(W-25,22)}`
+  :`<text x="${gx+gw/2}" y="${gy+gh/2+4}" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">Banheiro aguardando box</text>
+  <rect x="${gx}" y="${gy}" width="${gw}" height="${gh}" fill="rgba(180,210,190,0.06)" stroke="rgba(88,166,255,0.18)" stroke-width="1" stroke-dasharray="5 3"/>`}
+  ${label(done?'Box vidro fosco instalado ✓ (tom verde, perfil branco)':'Box fosco — aguardando instalação','97%')}
+  </svg>`;
+}
+
+/* ─── ESPELHO ACADEMIA ─── */
+function svgEspelhoAcad(done){
+  const W=360,H=220;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>${chromeDefs()}
+  <linearGradient id="gymwall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#16191e"/><stop offset="100%" stop-color="#11141a"/></linearGradient>
+  <linearGradient id="mirgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="rgba(200,220,255,0.22)"/><stop offset="40%" stop-color="rgba(160,190,240,0.12)"/><stop offset="100%" stop-color="rgba(200,220,255,0.2)"/></linearGradient>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#gymwall)"/>
+  <!-- floor rubber mat -->
+  <rect x="0" y="190" width="${W}" height="${H-190}" fill="#0f1114"/>
+  <!-- gym equipment (barbell) -->
+  ${done?`<rect x="8" y="155" width="40" height="8" rx="2" fill="#1e2530" stroke="#2a3040" stroke-width="1"/>
+  <rect x="4" y="148" width="10" height="22" rx="1" fill="#252d38" stroke="#303848" stroke-width="1"/>
+  <rect x="34" y="148" width="10" height="22" rx="1" fill="#252d38" stroke="#303848" stroke-width="1"/>
+  <rect x="310" y="155" width="40" height="8" rx="2" fill="#1e2530" stroke="#2a3040" stroke-width="1"/>
+  <rect x="306" y="148" width="10" height="22" rx="1" fill="#252d38" stroke="#303848" stroke-width="1"/>
+  <rect x="340" y="148" width="10" height="22" rx="1" fill="#252d38" stroke="#303848" stroke-width="1"/>`:''}
+  <!-- large mirror frame -->
+  <rect x="45" y="8" width="270" height="175" rx="1" fill="#0d1015" stroke="${done?'#8899aa':'#2a3040'}" stroke-width="${done?2:1.5}"/>
+  <!-- mirror surface -->
+  <rect x="48" y="11" width="264" height="169" fill="${done?'url(#mirgrad)':'rgba(88,166,255,0.03)'}"/>
+  ${done?`
+  <!-- shimmer highlights -->
+  <rect x="60" y="11" width="28" height="169" fill="rgba(255,255,255,0.055)"/>
+  <rect x="220" y="11" width="18" height="169" fill="rgba(255,255,255,0.04)"/>
+  <!-- reflection: overhead lights -->
+  <ellipse cx="130" cy="30" rx="25" ry="7" fill="rgba(255,255,255,0.12)"/>
+  <ellipse cx="250" cy="30" rx="20" ry="6" fill="rgba(255,255,255,0.1)"/>
+  <!-- person silhouette reflection -->
+  <ellipse cx="180" cy="70" rx="14" ry="16" fill="rgba(180,200,230,0.07)"/>
+  <rect x="173" y="86" width="14" height="40" rx="4" fill="rgba(180,200,230,0.06)"/>
+  <rect x="168" y="100" width="8" height="32" rx="3" fill="rgba(180,200,230,0.05)"/>
+  <rect x="184" y="100" width="8" height="32" rx="3" fill="rgba(180,200,230,0.05)"/>
+  ${checkBadge(W-28,24)}`
+  :`<text x="${W/2}" y="${H/2+4}" text-anchor="middle" font-size="9" fill="#4a5568" font-family="sans-serif">Parede da academia — espelho a instalar</text>
+  <rect x="48" y="11" width="264" height="169" fill="none" stroke="rgba(88,166,255,0.15)" stroke-width="1" stroke-dasharray="5 3"/>`}
+  ${label(done?'Espelho de academia instalado ✓':'Parede da academia','97%')}
+  </svg>`;
+}
+
+/* ─── ESPELHO QUARTO ─── */
+function svgEspelhoQuarto(done){
+  const W=360,H=220;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>${chromeDefs()}
+  <linearGradient id="qrtwall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1f1822"/><stop offset="100%" stop-color="#181420"/></linearGradient>
+  <linearGradient id="mqgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="rgba(220,200,255,0.2)"/><stop offset="40%" stop-color="rgba(185,165,230,0.1)"/><stop offset="100%" stop-color="rgba(220,200,255,0.17)"/></linearGradient>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#qrtwall)"/>
+  <!-- subtle wallpaper stripes -->
+  ${Array.from({length:12},(_,i)=>`<rect x="${i*30}" y="0" width="28" height="${H}" fill="rgba(255,255,255,0.012)"/>`).join('')}
+  <!-- floor -->
+  <rect x="0" y="188" width="${W}" height="${H-188}" fill="#130f18"/>
+  <!-- bedroom furniture -->
+  ${done?`<!-- bedside table left -->
+  <rect x="4" y="148" width="50" height="42" rx="3" fill="#1a1424" stroke="#2a2030" stroke-width="1"/>
+  <rect x="10" y="156" width="38" height="20" rx="2" fill="#151020" stroke="#222030" stroke-width="0.8"/>
+  <!-- lamp -->
+  <rect x="22" y="138" width="3" height="12" fill="#888"/>
+  <ellipse cx="23.5" cy="138" rx="10" ry="5" fill="#c8b060" opacity="0.7"/>
+  <ellipse cx="23.5" cy="138" rx="10" ry="5" fill="rgba(255,220,100,0.15)"/>
+  <!-- bedside right -->
+  <rect x="${W-54}" y="148" width="50" height="42" rx="3" fill="#1a1424" stroke="#2a2030" stroke-width="1"/>`:''}
+  <!-- decorative mirror with ornate frame -->
+  <rect x="105" y="10" width="150" height="160" rx="10" fill="#10091a" stroke="${done?'#b090c8':'#2a2035'}" stroke-width="${done?3:1.5}"/>
+  <!-- inner bevel -->
+  ${done?`<rect x="110" y="15" width="140" height="150" rx="8" fill="none" stroke="rgba(180,150,210,0.2)" stroke-width="1"/>`:''}
+  <!-- mirror glass -->
+  <rect x="112" y="17" width="136" height="146" rx="7" fill="${done?'url(#mqgrad)':'rgba(88,166,255,0.03)'}"/>
+  ${done?`
+  <!-- shimmer -->
+  <rect x="122" y="17" width="22" height="146" fill="rgba(255,255,255,0.06)"/>
+  <rect x="198" y="17" width="14" height="146" fill="rgba(255,255,255,0.04)"/>
+  <!-- reflection: room light -->
+  <ellipse cx="180" cy="38" rx="22" ry="8" fill="rgba(255,230,180,0.12)"/>
+  <!-- person silhouette -->
+  <ellipse cx="180" cy="78" rx="11" ry="12" fill="rgba(200,180,240,0.08)"/>
+  <rect x="174" y="90" width="12" height="34" rx="3" fill="rgba(200,180,240,0.06)"/>
+  ${checkBadge(W-28,24)}`
+  :`<text x="${W/2}" y="${H/2+4}" text-anchor="middle" font-size="9" fill="#4a3a58" font-family="sans-serif">Quarto — espelho a instalar</text>
+  <rect x="112" y="17" width="136" height="146" rx="7" fill="none" stroke="rgba(200,170,255,0.15)" stroke-width="1" stroke-dasharray="4 3"/>`}
+  ${label(done?'Espelho decorativo instalado ✓':'Quarto do cliente','97%')}
+  </svg>`;
+}
+
+/* ─── JANELA ─── */
+function svgJanela(done){
+  const W=360,H=220;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>${chromeDefs()}
+  <linearGradient id="roomwall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e2430"/><stop offset="100%" stop-color="#181d28"/></linearGradient>
+  <linearGradient id="skyblue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a3a5c"/><stop offset="100%" stop-color="#0d2035"/></linearGradient>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#roomwall)"/>
+  <!-- room baseboard -->
+  <rect x="0" y="192" width="${W}" height="6" fill="#151a22"/>
+  <rect x="0" y="198" width="${W}" height="${H-198}" fill="#101418"/>
+  <!-- window frame (aluminium) -->
+  <rect x="62" y="12" width="236" height="168" rx="3" fill="#2a3545" stroke="#1a2535" stroke-width="2"/>
+  <!-- window glass area -->
+  ${done?`
+  <!-- outside sky + city -->
+  <rect x="66" y="16" width="228" height="160" fill="url(#skyblue)" rx="2"/>
+  <!-- clouds -->
+  <ellipse cx="120" cy="45" rx="30" ry="10" fill="rgba(255,255,255,0.08)"/>
+  <ellipse cx="200" cy="55" rx="22" ry="8" fill="rgba(255,255,255,0.06)"/>
+  <ellipse cx="260" cy="42" rx="18" ry="7" fill="rgba(255,255,255,0.05)"/>
+  <!-- city horizon -->
+  <rect x="66" y="130" width="228" height="46" fill="rgba(10,20,40,0.4)"/>
+  <rect x="80" y="118" width="16" height="58" fill="rgba(20,35,60,0.6)"/>
+  <rect x="104" y="110" width="12" height="66" fill="rgba(20,35,60,0.5)"/>
+  <rect x="124" y="122" width="20" height="54" fill="rgba(20,35,60,0.5)"/>
+  <rect x="240" y="112" width="14" height="64" fill="rgba(20,35,60,0.55)"/>
+  <rect x="262" y="125" width="18" height="51" fill="rgba(20,35,60,0.5)"/>
+  <!-- window divider (2 panels) -->
+  <rect x="66" y="16" width="112" height="160" fill="rgba(160,200,255,0.1)" stroke="#2a3545" stroke-width="2"/>
+  <rect x="182" y="16" width="112" height="160" fill="rgba(160,200,255,0.08)" stroke="#2a3545" stroke-width="2"/>
+  <rect x="178" y="16" width="6" height="160" fill="#2a3545"/>
+  <!-- window handle -->
+  <rect x="170" y="95" width="18" height="10" rx="3" fill="url(#chr)" stroke="#aaa" stroke-width="0.5"/>
+  ${checkBadge(W-28,26)}`
+  :`<!-- broken glass -->
+  <rect x="66" y="16" width="228" height="160" fill="#0d1018" rx="2"/>
+  <line x1="66" y1="16" x2="294" y2="176" stroke="rgba(248,81,73,0.35)" stroke-width="1.2"/>
+  <line x1="160" y1="16" x2="66" y2="100" stroke="rgba(248,81,73,0.25)" stroke-width="1"/>
+  <line x1="294" y1="60" x2="200" y2="176" stroke="rgba(248,81,73,0.25)" stroke-width="1"/>
+  <text x="${W/2}" y="103" text-anchor="middle" font-size="9" fill="rgba(248,81,73,0.6)" font-family="sans-serif">vidro quebrado — remover</text>`}
+  ${label(done?'Vidro instalado na janela ✓':'Janela residencial — vidro quebrado','97%')}
+  </svg>`;
+}
+
+/* ============================
+   MÃO NA MASSA — SCENES
+============================ */
+// Steps shared across all box types
+const BOX_STEPS_BASE = [
+  {t:'Medição do Vão',
+   d:'Primeiro passo: medir com precisão o vão onde o box será instalado. Qual ferramenta você usa?',
+   h:'Instrumento de fita metálica retrátil e graduada para medir distâncias.',c:'trena',
+   ok:'A trena (metro) é essencial! Meça largura e altura em pelo menos 2 pontos — paredes podem não ser retas!',
+   err:'Isso não serve para medir distâncias. Use o instrumento correto de medição!'},
+  {t:'Nivelamento dos Perfis',
+   d:'Antes de fixar os perfis na parede, você precisa garantir que estejam perfeitamente nivelados. Qual ferramenta você usa?',
+   h:'Instrumento com bolha de ar (ou laser) que indica se a superfície está reta.',c:'nivel',
+   ok:'Perfeito! O nível é indispensável. Perfis tortos fazem a porta do box travar ou não fechar direito!',
+   err:'Isso não verifica nivelamento. Use o instrumento com bolha de ar!'},
+  {t:'Corte dos Perfis',
+   d:'Os perfis de alumínio precisam ser cortados na medida certa. Qual ferramenta você usa para cortar?',
+   h:'Ferramenta elétrica rotatória com disco de corte para materiais metálicos.',c:'lixadeira',
+   ok:'Isso! A lixadeira com disco de corte para alumínio é a ferramenta certa. Use EPI: óculos, luvas e protetor auricular!',
+   err:'Isso não corta perfis metálicos com precisão. Use a ferramenta com disco de corte!'},
+  {t:'Furação na Parede',
+   d:'Para fixar os perfis na parede você precisa fazer furos para as buchas. Qual ferramenta você usa?',
+   h:'Ferramenta elétrica com broca de impacto para alvenaria e porcelana.',c:'furadeira',
+   ok:'Excelente! A furadeira com broca correta (concreto ou porcelana dependendo do revestimento) faz os furos certeiros.',
+   err:'Isso não fura paredes. Use a ferramenta elétrica com broca!'},
+  {t:'Manuseio do Vidro Temperado',
+   d:'O vidro temperado é pesado e frágil nas bordas. Como você o segura e posiciona com segurança?',
+   h:'Equipamento de sucção que gruda na superfície plana do vidro — nunca segure pelas bordas!',c:'ventosa',
+   ok:'Muito bem! A ventosa é obrigatória. Vidro temperado pelas bordas pode trincar e quebrar em fragmentos!',
+   err:'⚠️ PERIGOSO! Nunca carregue vidro temperado pelas bordas. Use o equipamento de sucção!'},
+  {t:'Vedação com Silicone',
+   d:'Com o vidro posicionado, hora de vedar todas as juntas e bordas. Qual equipamento você usa?',
+   h:'Pistola aplicadora que usa cartucho de silicone — aplica com pressão uniforme e controle.',c:'bomba-silicone',
+   ok:'Perfeito! Bomba de silicone + silicone NEUTRO. Flexível, impermeável, não corrói alumínio. Aguarde 24h para usar!',
+   err:'Para vedar box use sempre bomba de silicone com silicone neutro — nunca massa, pois endurece e pressiona o vidro!'},
+  {t:'Limpeza Final',
+   d:'Box instalado! Hora de limpar excessos de silicone e deixar o vidro cristalino. Qual produto você usa?',
+   h:'Líquido que remove silicone curado e manchas sem arranhar o vidro temperado.',c:'alcool-querosene',
+   ok:'Ótimo! Querosene dissolve o silicone e álcool faz a limpeza final. Pano macio ou microfibra — nunca esponja abrasiva!',
+   err:'Esse produto pode arranhar ou deixar resíduo no vidro. Use o produto correto de limpeza!'}
+];
+
+const SCENES = {
+  box_deslizante:{id:'box_deslizante',nome:'Box Deslizante — Perfil Preto',
+    sub:'Porta de correr com perfil preto fosco (foto 1)',
+    thumb:()=>svgBoxDeslizante(false),final:()=>svgBoxDeslizante(true),
+    steps:BOX_STEPS_BASE},
+
+  box_canto:{id:'box_canto',nome:'Box de Canto — Perfil Inox',
+    sub:'Box em L com dois painéis e perfil cromado (foto 2)',
+    thumb:()=>svgBoxCanto(false),final:()=>svgBoxCanto(true),
+    steps:BOX_STEPS_BASE},
+
+  box_frameless:{id:'box_frameless',nome:'Box Frameless — Sem Perfis',
+    sub:'Duas portas sem perfis, ferragens pontuais cromadas (foto 3)',
+    thumb:()=>svgBoxFrameless(false),final:()=>svgBoxFrameless(true),
+    steps:[...BOX_STEPS_BASE.slice(0,2),
+      {t:'Corte dos Perfis (N/A — Frameless)',
+       d:'Este box não tem perfis de alumínio! Como você deve preparar as bordas do vidro temperado?',
+       h:'Para box sem perfis, as bordas do vidro ficam expostas — use a ferramenta abrasiva só nas arestas.',c:'lixadeira',
+       ok:'Correto! No frameless as bordas do vidro podem precisar de polimento com lixadeira. Tome muito cuidado — vidro temperado não pode ser cortado, apenas polido nas bordas!',
+       err:'No box frameless você ainda precisa preparar as bordas do vidro com a ferramenta abrasiva correta!'},
+      ...BOX_STEPS_BASE.slice(3)]},
+
+  box_preto_luxo:{id:'box_preto_luxo',nome:'Box Perfil Preto Luxo',
+    sub:'Box com perfil preto espesso, paredes de mármore (foto 4)',
+    thumb:()=>svgBoxPretoLuxo(false),final:()=>svgBoxPretoLuxo(true),
+    steps:BOX_STEPS_BASE},
+
+  box_vidro_total:{id:'box_vidro_total',nome:'Box Vidro Total — Slim Inox',
+    sub:'Box grande sem rodapé, perfil slim inox (foto 5)',
+    thumb:()=>svgBoxVidroTotal(false),final:()=>svgBoxVidroTotal(true),
+    steps:BOX_STEPS_BASE},
+
+  box_fosco:{id:'box_fosco',nome:'Box Vidro Fosco — Perfil Branco',
+    sub:'Box com vidro verde fosco e perfil branco (foto 6)',
+    thumb:()=>svgBoxFosco(false),final:()=>svgBoxFosco(true),
+    steps:[...BOX_STEPS_BASE.slice(0,5),
+      {t:'Vedação do Box Fosco',
+       d:'O vidro fosco tem textura — o silicone precisa ser aplicado com cuidado nas bordas. Qual equipamento você usa?',
+       h:'Pistola aplicadora de silicone para aplicação precisa nas junções entre vidro fosco e perfil.',c:'bomba-silicone',
+       ok:'Correto! No vidro fosco a textura pode dificultar a aderência. Pressione levemente o silicone para penetrar na textura e vedar bem!',
+       err:'Use a bomba de silicone para controle preciso da aplicação!'},
+      BOX_STEPS_BASE[6]]},
+
+  espelho_acad:{id:'espelho_acad',nome:'Espelho Grande — Academia',
+    sub:'Espelho de 2m+ fixado em parede de academia',
+    thumb:()=>svgEspelhoAcad(false),final:()=>svgEspelhoAcad(true),
+    steps:[
+      {t:'Preparação das Bordas',d:'O espelho chegou com bordas cortantes. O que você usa para alisar as arestas?',
+       h:'Ferramenta elétrica rotatória — use SOMENTE nas bordas, nunca na face espelhada!',c:'lixadeira',
+       ok:'Correto! A lixadeira nas bordas remove as arestas afiadas. NUNCA passe na face espelhada — arranha permanentemente!',
+       err:'Isso não remove bordas cortantes. Use a ferramenta abrasiva elétrica nas bordas!'},
+      {t:'Nivelamento',d:'Antes de marcar os pontos na parede, você precisa garantir que o espelho ficará perfeitamente reto. Qual ferramenta?',
+       h:'Instrumento com bolha de ar — indica se está horizontal e vertical.',c:'nivel',
+       ok:'Ótimo! Espelho torto em academia é visível a todos. Marque com nível e lápis antes de qualquer colagem!',
+       err:'Isso não verifica nivelamento. Use o instrumento com bolha de ar!'},
+      {t:'Manuseio do Espelho Pesado',d:'O espelho tem 2m de altura e pesa ~35kg. Como você o segura e posiciona?',
+       h:'Equipamento de sucção que gruda em superfícies planas — permite movimentar sem tocar nas bordas.',c:'ventosa',
+       ok:'Perfeito! Ventosa obrigatória para espelhos grandes. Dois operadores + ventosa = segurança na instalação!',
+       err:'⚠️ PERIGOSO! Espelho pesado pode cair e quebrar. Use o equipamento de sucção profissional!'},
+      {t:'Colagem Especial para Espelho',d:'Hora de colar. ATENÇÃO: silicone errado mancha a prata! Qual produto/equipamento você usa?',
+       h:'Bomba aplicadora com silicone ESPECIAL para espelho — não corrói a camada de prata no verso.',c:'bomba-silicone',
+       ok:'Correto! Silicone especial para espelho + bomba. Aplique em pontos (não em linha) para distribuir bem sem criar pressão!',
+       err:'⚠️ Silicone comum corrói a prata do espelho! Massa quebra com o tempo. Use silicone específico para espelho!'},
+      {t:'Suporte Temporário (Calços)',d:'O silicone ainda não secou. O espelho pode escorregar! O que você coloca na base?',
+       h:'Pequenas peças rígidas colocadas na base como apoio enquanto o adesivo cura por 24–48h.',c:'calcos',
+       ok:'Excelente! Os calços sustentam o espelho enquanto o silicone cura. Só retire após 48h completas!',
+       err:'Isso não sustenta o espelho durante a cura. Use os suportes temporários corretos!'},
+      {t:'Limpeza Final',d:'Espelho fixado! Remova marcas de dedos e resíduos. Qual produto você usa?',
+       h:'Líquido que limpa sem manchar a prata — nunca use produtos com amônia em espelhos!',c:'alcool-querosene',
+       ok:'Perfeito! Álcool + microfibra. Querosene para remover silicone. NUNCA amônia — mancha a prata do espelho!',
+       err:'Cuidado! Produtos errados mancham a prata. Use o produto correto de limpeza para espelhos!'}
+    ]},
+
+  espelho_quarto:{id:'espelho_quarto',nome:'Espelho Decorativo — Quarto',
+    sub:'Espelho pequeno/médio fixado em quarto do cliente',
+    thumb:()=>svgEspelhoQuarto(false),final:()=>svgEspelhoQuarto(true),
+    steps:[
+      {t:'Nivelamento',d:'Antes de marcar o local, você precisa garantir que o espelho ficará reto. Qual ferramenta você usa?',
+       h:'Instrumento com bolha de ar — indica se está perfeitamente horizontal.',c:'nivel',
+       ok:'Correto! O nível garante alinhamento perfeito. Marque os pontos com lápis antes de qualquer fixação!',
+       err:'Isso não verifica nivelamento. Use o instrumento com bolha de ar!'},
+      {t:'Fixação com Fita',d:'Para espelho pequeno (até 5kg) na parede, qual é a melhor fixação sem furar a parede?',
+       h:'Fita adesiva especial transparente com adesivo nos dois lados — forte em superfícies lisas.',c:'fita-dupla-face',
+       ok:'Ótimo! Fita dupla face de alta resistência é perfeita para espelhos leves. Combine com silicone para garantia!',
+       err:'Para espelho pequeno existe opção mais prática que não danifica a parede!'},
+      {t:'Silicone de Segurança',d:'Para garantir maior segurança você complementa com silicone no verso. Qual ferramenta aplica?',
+       h:'Pistola/bomba que aplica cartucho de silicone com controle e pressão uniforme.',c:'bomba-silicone',
+       ok:'Correto! Bomba + silicone especial para espelho. Em pontos — não em linha contínua — para evitar pressão!',
+       err:'Para aplicar silicone em cartucho você precisa da pistola aplicadora correta!'},
+      {t:'Limpeza Final',d:'Espelho instalado! Limpe as marcas de dedos e deixe impecável para o cliente.',
+       h:'Líquido que limpa sem deixar manchas na superfície espelhada.',c:'alcool-querosene',
+       ok:'Perfeito! Álcool + pano de microfibra. O cliente ficará encantado com o resultado final!',
+       err:'Esse produto pode deixar marcas no espelho. Use o produto correto de limpeza!'}
+    ]},
+
+  janela:{id:'janela',nome:'Vidro em Janela Residencial',
+    sub:'Substituição de vidro quebrado em janela',
+    thumb:()=>svgJanela(false),final:()=>svgJanela(true),
+    steps:[
+      {t:'EPI — Proteção das Mãos',d:'Há cacos de vidro quebrado para remover. Qual EPI você usa OBRIGATORIAMENTE nas mãos?',
+       h:'Equipamento que protege as mãos de cortes — sempre o primeiro item a calçar!',c:'luvas',
+       ok:'Correto! Luvas grossas são obrigatórias ao manusear vidros quebrados. Use também óculos de proteção!',
+       err:'⚠️ PERIGO! Trabalhar com cacos sem proteção é gravíssimo. Use o EPI correto primeiro!'},
+      {t:'Medição do Vão',d:'Com o vidro removido, meça o vão com precisão. Qual ferramenta você usa?',
+       h:'Instrumento de fita retrátil para medir distâncias com precisão milimétrica.',c:'trena',
+       ok:'Certo! Meça em dois pontos. Desconte 2–3mm de folga para dilatação térmica!',
+       err:'Isso não mede com precisão. Use o instrumento de medição correto!'},
+      {t:'Corte do Vidro',d:'Você tem a placa de vidro. Como você faz o corte no tamanho exato?',
+       h:'Ferramenta com ponta que risca o vidro criando linha de corte precisa — UMA passada contínua.',c:'diamante',
+       ok:'Perfeito! Uma passada firme e contínua com o diamante. Depois quebre na linha com pressão nas pontas!',
+       err:'Isso não corta vidro! Use a ferramenta com ponta de diamante para riscar e quebrar na linha.'},
+      {t:'Acabamento das Bordas',d:'Vidro cortado, bordas afiadas. O que você usa para remover as partes cortantes?',
+       h:'Ferramenta elétrica rotatória com disco para desbaste de bordas de vidro.',c:'lixadeira',
+       ok:'Ótimo! Lixadeira para desbaste e lixa manual para acabamento. Sempre com água para não inalar pó de vidro!',
+       err:'Isso não remove bordas cortantes. Use a ferramenta abrasiva elétrica!'},
+      {t:'Fixação no Caixilho',d:'Vidro pronto. Qual produto você usa para prender e vedar no caixilho da janela?',
+       h:'Produto flexível que não endurece rígido como massa — não pressiona nem quebra o vidro com o tempo.',c:'silicone',
+       ok:'Excelente! Silicone flexível é melhor que massa — não pressiona o vidro ao expandir. A massa pode quebrar o vidro!',
+       err:'Cuidado! A massa endurece e pode quebrar o vidro. Prefira sempre o produto flexível!'},
+      {t:'Limpeza e Entrega',d:'Vidro instalado! Como você limpa antes de mostrar ao cliente?',
+       h:'Líquido de limpeza que não deixa resíduos — use com pano de microfibra ou jornal.',c:'alcool-querosene',
+       ok:'Perfeito! Álcool + microfibra ou jornal. Limpe de dentro e de fora. Nunca use esponja com lado abrasivo!',
+       err:'Esse produto pode deixar marcas ou riscar o vidro. Use o produto correto!'}
+    ]}
+};
+
+/* ============================
+   MÃO NA MASSA — BUILD PICKER
+============================ */
+function buildMM(){
+  document.getElementById('mmPicker').innerHTML=Object.values(SCENES).map(s=>`
+    <div class="mm-sc" onclick="mmStart('${s.id}')">
+      ${s.thumb()}
+      <div class="mm-sc-lbl">${s.nome}</div>
+      <div class="mm-sc-sub">${s.sub}</div>
+    </div>`).join('');
+}
+
+/* ============================
+   MÃO NA MASSA — GAME
+============================ */
+let mmSc=null,mmSt=0,mmSc2=0,mmDone=false;
+
+function mmStart(id){
+  mmSc=SCENES[id]; mmSt=0; mmSc2=0; mmDone=false;
+  document.getElementById('mmPickerWrap').style.display='none';
+  document.getElementById('mmGame').classList.add('on');
+  document.getElementById('mmResult').classList.remove('on');
+  document.getElementById('mmGTitle').textContent=mmSc.nome;
+  document.getElementById('mmSV').textContent='0';
+  renderMmStep();
+}
+
+function mmBack(){
+  document.getElementById('mmPickerWrap').style.display='block';
+  document.getElementById('mmGame').classList.remove('on');
+  document.getElementById('mmResult').classList.remove('on');
+  mmSc=null;
+}
+
+function getPool(correctId){
+  const correct=DATA.ferramentas.find(f=>f.id===correctId);
+  const usedIds=mmSc.steps.slice(0,mmSt).map(s=>s.c);
+  const others=DATA.ferramentas.filter(f=>f.id!==correctId&&!usedIds.includes(f.id))
+    .sort(()=>Math.random()-.5).slice(0,8);
+  return [...[correct,...others]].sort(()=>Math.random()-.5);
+}
+
+function renderMmStep(){
+  const step=mmSc.steps[mmSt];
+  const pool=getPool(step.c);
+  const dots=mmSc.steps.map((_,i)=>`<div class="mm-dot ${i<mmSt?'done':i===mmSt?'cur':''}"></div>`).join('');
+  const tools=pool.map(f=>`
+    <div class="mm-tool" id="mmt-${f.id}" onclick="mmPick('${f.id}')">
+      <span class="mm-tico">${f.icone}</span>
+      <span class="mm-tnm">${f.nome}</span>
+    </div>`).join('');
+
+  document.getElementById('mmStepArea').innerHTML=`
+    <div class="mm-layout">
+      <div>
+        <div class="mm-sinfo">
+          <div class="mm-shd">
+            <div class="mm-sn">0${mmSt+1}</div>
+            <div class="mm-st">${step.t}</div>
+          </div>
+          <div class="mm-sb">
+            <div class="mm-sdesc">${step.d}</div>
+            <div class="mm-hlbl">💡 Dica do Mestre</div>
+            <div class="mm-hint">${step.h}</div>
+            <div class="mm-fb" id="mmFB"></div>
+            <div class="mm-dots">${dots}</div>
+            <div style="display:flex;justify-content:flex-end;margin-top:.65rem">
+              <button class="sbtn sbtn-n mm-next-btn" id="mmNB" onclick="mmNext()">
+                ${mmSt<mmSc.steps.length-1?'Próxima etapa →':'Ver resultado final ✓'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="mm-tray-wrap">
+          <div class="mm-thd"><div class="mm-ttit">🔧 Escolha a Ferramenta Certa</div></div>
+          <div class="mm-tray">${tools}</div>
+        </div>
+      </div>
+    </div>`;
+
+  // Mark previously used correct tools
+  mmSc.steps.slice(0,mmSt).forEach(s=>{
+    const el=document.getElementById('mmt-'+s.c);
+    if(el)el.classList.add('used');
+  });
+}
+
+function mmPick(tid){
+  if(mmDone)return;
+  const step=mmSc.steps[mmSt];
+  const fb=document.getElementById('mmFB');
+  const nb=document.getElementById('mmNB');
+  if(tid===step.c){
+    mmDone=true; mmSc2++;
+    document.getElementById('mmSV').textContent=mmSc2;
+    const el=document.getElementById('mmt-'+tid);
+    if(el)el.classList.add('ok');
+    fb.className='mm-fb show ok';
+    fb.innerHTML=`<strong>✓ Correto!</strong> ${step.ok}`;
+    if(nb)nb.classList.add('vis');
+  } else {
+    const el=document.getElementById('mmt-'+tid);
+    if(el){el.classList.add('err');setTimeout(()=>el.classList.remove('err'),400);}
+    fb.className='mm-fb show err';
+    fb.innerHTML=`<strong>✕ Não é essa!</strong> ${step.err}`;
+  }
+}
+
+function mmNext(){
+  mmSt++; mmDone=false;
+  if(mmSt>=mmSc.steps.length) showMmResult();
+  else{renderMmStep();window.scrollTo({top:180,behavior:'smooth'});}
+}
+
+function showMmResult(){
+  document.getElementById('mmStepArea').innerHTML='';
+  const tot=mmSc.steps.length;
+  const pct=Math.round((mmSc2/tot)*100);
+  let rat,rc;
+  if(pct===100){rat='PERFEITO! Trabalho impecável — você é referência!';rc='var(--success)'}
+  else if(pct>=70){rat='Bom trabalho! Pratique mais para ser o melhor.';rc='var(--warning)'}
+  else{rat='Continue praticando! Revise as ferramentas corretas.';rc='var(--danger)'}
+  const res=document.getElementById('mmResult');
+  res.className='mm-result on';
+  res.innerHTML=`
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.4rem">
+      <div class="mm-rtit">SERVIÇO CONCLUÍDO!</div>
+      <div class="mm-rsub">Você acertou <strong style="color:var(--accent2)">${mmSc2} de ${tot}</strong> ferramentas —
+        <span style="color:${rc}">${rat}</span></div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--text3);letter-spacing:2px;margin-bottom:.85rem">RESULTADO FINAL DA INSTALAÇÃO:</div>
+      <div class="mm-scene-box">${mmSc.final()}</div>
+      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+        <button class="mm-rbtn" onclick="mmStart('${mmSc.id}')">↺ Tentar de Novo</button>
+        <button class="sback" onclick="mmBack()">← Outro Serviço</button>
+      </div>
+    </div>`;
+  window.scrollTo({top:180,behavior:'smooth'});
+}
+
+/* ============================
+   START
+============================ */
+loadData();
