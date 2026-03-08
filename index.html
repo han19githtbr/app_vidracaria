@@ -4,6 +4,16 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Guia do Vidraceiro Profissional</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#00c8ff"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="VidraceiroPro"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet"/>
   <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
@@ -93,6 +103,17 @@
 </div>
 
 <script src="js/index.js"></script>
+
+<!-- Registro do Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('✅ Service Worker registrado:', reg.scope))
+        .catch(err => console.warn('❌ Falha ao registrar SW:', err));
+    });
+  }
+</script>
 
 </body>
 </html>
