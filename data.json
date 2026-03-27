@@ -382,10 +382,18 @@
         },
         {
           "passo": 3,
-          "titulo": "Fixação dos Perfis",
-          "descricao": "Use o nível para garantir que os perfis estejam nivelados. Faça os furos na parede e fixe os perfis com parafusos e buchas.",
+          "titulo": "Avaliação da Parede e Furação",
+          "descricao": "Antes de furar, identifique o tipo de parede: alvenaria comum, concreto, mármore ou porcelanato. Cada material exige broca e velocidade diferentes. Parede de mármore exige broca diamantada e água para resfriar. Paredes de concreto armado exigem mais força. Furar errado pode rachar o revestimento ou derrubar o perfil.",
           "ferramentas": ["furadeira", "nivel", "parafusadeira"],
-          "cuidados": ["Verificar se não há encanamentos ou fiações elétricas nos pontos de furo", "Usar buchas adequadas para o tipo de parede"]
+          "cuidados": [
+            "⚠️ Mármore e porcelanato: use broca diamantada com água — broca comum quebra o material",
+            "⚠️ Concreto: use broca para concreto e impacto regulado — não force",
+            "⚠️ Alvenaria simples (tijolo): broca de aço comum funciona, mas verifique solidez da parede",
+            "Verificar se não há encanamentos ou fiações elétricas nos pontos de furo",
+            "Usar buchas adequadas para cada tipo de parede — bucha amarela para alvenaria, bucha especial para concreto",
+            "Furo bem-feito garante que o perfil não caia com o peso do vidro",
+            "Testar a solidez batendo suavemente na parede antes — som oco indica parede falsa"
+          ]
         },
         {
           "passo": 4,
@@ -396,10 +404,17 @@
         },
         {
           "passo": 5,
-          "titulo": "Vedação com Silicone",
-          "descricao": "Aplique silicone neutro nas juntas e bordas. O silicone neutro não corrói o alumínio e não danifica o vidro.",
+          "titulo": "Escolha do Silicone e Vedação",
+          "descricao": "Para box de vidro temperado, use SEMPRE silicone neutro. O silicone ácido (cheiro forte de vinagre) corrói o alumínio e pode reagir mal com o vidro temperado. Aplique nas juntas e bordas com a bomba, alisando com o dedo molhado. O silicone neutro leva 24h para secar superficialmente e até 72h para cura total em ambientes fechados. Nunca aplique massa por cima do silicone ainda fresco — o silicone isola a umidade e a massa não seca direito, podendo demorar dias ou semanas.",
           "ferramentas": ["silicone", "bomba-silicone", "estilete"],
-          "cuidados": ["Usar apenas silicone NEUTRO para box", "Molhar o dedo com água para alisar o silicone", "Aguardar 24h para usar o box"]
+          "cuidados": [
+            "⚠️ Usar SILICONE NEUTRO para box e alumínio — silicone ácido corrói o perfil",
+            "⚠️ Silicone neutro: cura superficial em 24h, cura total em 48-72h",
+            "⚠️ NUNCA aplicar massa por cima de silicone fresco — a massa não seca e descola",
+            "Se precisar acabamento com massa, aguarde a cura TOTAL do silicone (72h) antes",
+            "Molhar o dedo com água (nunca seco) para alisar sem grudar",
+            "Não usar o box antes de 24h mesmo que pareça seco por fora"
+          ]
         },
         {
           "passo": 6,
@@ -495,17 +510,213 @@
         },
         {
           "passo": 5,
-          "titulo": "Instalação na Janela",
-          "descricao": "Limpar o caixilho. Aplicar silicone ou massa no caixilho e posicionar o vidro. Verificar nivelamento.",
+          "titulo": "Escolha do Fixador: Silicone ou Massa?",
+          "descricao": "Esta é uma das decisões mais críticas da instalação. Para vidros comuns em janelas de madeira ou PVC, massa tradicional pode ser usada — mas tem restrições. Para vidros sensíveis, temperados ou espelhos, use SEMPRE silicone. Há um tipo de silicone para cada situação: neutro (para alumínio e box), acetático (para vidro e cerâmica), especial para espelho (não mancha). Atenção: a massa seca mais devagar em ambientes úmidos ou se estiver sobre silicone. Um erro clássico: aplicar massa de acabamento por cima de silicone ainda fresco — o silicone isola a evaporação e a massa pode demorar dias para secar, descolar ou criar bolhas.",
           "ferramentas": ["silicone", "bomba-silicone", "massa", "nivel", "alcool-querosene"],
-          "cuidados": ["Para vidros comuns, pode usar massa ou silicone", "Para vidros mais sensíveis, SEMPRE usar silicone", "Massa pode quebrar vidros se endurecer demais com pressão", "Deixar 2-3mm de folga nas bordas"]
+          "cuidados": [
+            "⚠️ Caso REAL: massa aplicada sobre silicone fresco demora muito para secar — aguarde 72h de cura do silicone antes",
+            "⚠️ MASSA endurece com o tempo e pode criar pressão que quebra o vidro — evite para vidros sensíveis",
+            "Silicone NEUTRO: para alumínio, box, áreas com água",
+            "Silicone ACETÁTICO: para vidro contra cerâmica ou concreto seco",
+            "Silicone ESPECIAL ESPELHO: nunca mancha a camada prata — não substitua por outro",
+            "Para janelas de madeira com vidro comum: massa é aceitável, mas verifique expansão sazonal da madeira",
+            "Temperatura ambiente abaixo de 15°C aumenta o tempo de cura de qualquer produto",
+            "Deixar 2-3mm de folga nas bordas para absorver dilatação térmica do vidro"
+          ]
         },
         {
           "passo": 6,
-          "titulo": "Limpeza e Entrega",
-          "descricao": "Limpar o vidro instalado com álcool e pano de microfibra. Verificar com o cliente antes de finalizar.",
-          "ferramentas": ["alcool-querosene"],
-          "cuidados": ["Não usar esponjas abrasivas", "Circular internamente e externamente", "Mostrar o trabalho finalizado ao cliente"]
+          "titulo": "Cura, Acabamento e Entrega",
+          "descricao": "Limpe excessos de massa ou silicone antes de endurecerem (mais fácil). Use querosene para silicone curado. Atenção: se aplicou massa por cima de silicone, verifique secagem tocando suavemente antes de entregar ao cliente. Mostre o serviço finalizado, explique o tempo de espera e oriente sobre limpeza.",
+          "ferramentas": ["alcool-querosene", "estilete"],
+          "cuidados": [
+            "Remover excessos de silicone fresco com pano úmido — depois de curado, use querosene",
+            "⚠️ Se combinou massa e silicone: teste a secagem da massa antes de fechar o serviço",
+            "Não usar esponjas abrasivas",
+            "Verificar de dentro e de fora antes de entregar",
+            "Mostrar o trabalho finalizado ao cliente e explicar os cuidados iniciais"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parede_especial",
+      "nome": "Furação em Paredes Especiais",
+      "icone": "🪨",
+      "descricao": "Guia prático para furar paredes de mármore, granito, porcelanato e concreto armado — os materiais que exigem mais cuidado e técnica específica.",
+      "dificuldade": "alta",
+      "ferramentas": ["furadeira", "nivel", "trena", "luvas"],
+      "vidros_usados": ["temperado", "incolor"],
+      "passo_a_passo": [
+        {
+          "passo": 1,
+          "titulo": "Identificação do Tipo de Parede",
+          "descricao": "Antes de qualquer furo, identifique o material da parede. Bata suavemente: som cheio indica concreto ou alvenaria sólida; som oco indica parede falsa (drywall ou bloco oco). Marmore e granito são frios ao toque e muito densos. Porcelanato tem aparência muito uniforme. Cada tipo exige técnica diferente.",
+          "ferramentas": ["trena", "nivel"],
+          "cuidados": [
+            "⚠️ Parede oca (drywall): não suporta peso — use fixadores específicos para drywall",
+            "Som oco ao bater = parede não suporta cargas pesadas",
+            "Mármore e granito: não furar no frio extremo — risco de rachar",
+            "Antes de furar, verificar se há fios ou canos ocultos com detector"
+          ]
+        },
+        {
+          "passo": 2,
+          "titulo": "Escolha da Broca Correta",
+          "descricao": "Cada parede exige uma broca específica. Alvenaria e tijolo: broca de aço com pastilha de metal duro. Concreto armado: broca SDS com impacto. Mármore, granito e porcelanato: OBRIGATORIAMENTE broca diamantada — qualquer outra lascará ou estilhaçará o material. Broca errada = material danificado.",
+          "ferramentas": ["furadeira"],
+          "cuidados": [
+            "⚠️ MÁRMORE e GRANITO: somente broca diamantada com água — broca comum lasca ou quebra",
+            "⚠️ PORCELANATO: broca diamantada tubo (core drill) para furos grandes; broca diamantada copo para furos de parafuso",
+            "⚠️ CONCRETO ARMADO: broca SDS com martelete — nunca furadeira simples",
+            "Alvenaria de tijolo: broca de aço com ponta de metal duro — mais rápido e fácil",
+            "Nunca use a mesma broca em materiais diferentes sem checar o tipo"
+          ]
+        },
+        {
+          "passo": 3,
+          "titulo": "Técnica de Furação no Mármore e Granito",
+          "descricao": "Mármore e granito são os materiais mais críticos. Use broca diamantada com velocidade baixa (600-800 rpm máx.) e aplique água constantemente para refrigerar. Faça um gabarito de isopor ou borracha ao redor do ponto de furo para criar uma 'piscina' de água. Pressão leve e constante — nunca force. O furo pode demorar 3-5 minutos em granito.",
+          "ferramentas": ["furadeira", "nivel"],
+          "cuidados": [
+            "⚠️ Velocidade alta + broca diamantada = broca destruída e mármore rachado",
+            "⚠️ Sem água de refrigeração = a broca queima e o material racha",
+            "Gabarito de isopor colado com fita: cria reservatório de água sobre o furo",
+            "Pressão muito forte quebra a broca — deixe o peso da furadeira trabalhar",
+            "Mármore é mais frágil que granito — reduza ainda mais a velocidade",
+            "Após o furo, insira a bucha devagar sem bater com martelo — o mármore pode rachar"
+          ]
+        },
+        {
+          "passo": 4,
+          "titulo": "Furação no Concreto Armado",
+          "descricao": "Concreto armado pode ter barras de ferro dentro. Se a broca travar ou não avançar, pode ter acertado uma ferragem. Nesse caso, NÃO force — mude o ponto. Use martelete com função de impacto ativada. A bucha para concreto deve ser específica (bucha de nylon 6mm ou 8mm para cargas pesadas).",
+          "ferramentas": ["furadeira", "nivel"],
+          "cuidados": [
+            "⚠️ Se a broca parar de avançar e você sentir resistência metálica: mude o ponto de furo — há ferragem",
+            "⚠️ Furar a ferragem sem equipamento específico pode danificar a estrutura",
+            "Use impacto regulado — em potência máxima, o vibração pode trincar o reboco ao redor",
+            "Sopre o pó do furo antes de inserir a bucha",
+            "Bucha adequada: para parafuso de 6mm use bucha S6; para 8mm use S8"
+          ]
+        },
+        {
+          "passo": 5,
+          "titulo": "Fixação dos Perfis e Verificação de Solidez",
+          "descricao": "Com os furos feitos e as buchas inseridas corretamente, fixe os perfis com parafusos adequados. Após fixar, faça o teste de solidez: empurre o perfil firmemente nas direções diferentes. Qualquer movimento indica furo frouxo — refaça com bucha maior ou mude o ponto. Um perfil solto pode soltar o vidro inteiro.",
+          "ferramentas": ["furadeira", "nivel", "parafusadeira"],
+          "cuidados": [
+            "⚠️ Perfil com movimento = risco de queda do vidro — nunca ignore",
+            "Parafuso apertado demais em mármore ou porcelanato pode rachar a peça",
+            "Use arruela de borracha entre o perfil e o revestimento especial para amortecer",
+            "Verifique o nivelamento após a fixação final — furos tortos podem desalinhar o perfil",
+            "Em mármore: aperte o parafuso devagar, sentindo a resistência do material"
+          ]
+        },
+        {
+          "passo": 6,
+          "titulo": "Vedação e Acabamento na Parede Especial",
+          "descricao": "Após fixar os perfis em mármore ou porcelanato, a vedação da borda do perfil com a parede é essencial para evitar entrada de umidade e para o acabamento visual. Use silicone neutro ou de cor compatível. Nunca use massa aqui — a expansão da massa pode rachar o mármore ao redor do furo.",
+          "ferramentas": ["silicone", "bomba-silicone"],
+          "cuidados": [
+            "⚠️ NUNCA usar massa em contato direto com mármore ou porcelanato — pode rachar",
+            "Silicone neutro translúcido: praticamente invisível e não mancha pedra natural",
+            "Silicone branco: para paredes pintadas ou azulejos brancos",
+            "Alise com dedo molhado para acabamento profissional",
+            "Aguarde 24h antes de instalar o vidro sobre o perfil recém-fixado"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "silicone_massa",
+      "nome": "Silicone vs Massa: Cenário Real",
+      "icone": "🔬",
+      "descricao": "Situação real e comum: como escolher, combinar ou evitar silicone e massa. Inclui o caso de massa aplicada sobre silicone fresco — um erro que atrasa o serviço.",
+      "dificuldade": "media",
+      "ferramentas": ["silicone", "bomba-silicone", "massa", "estilete"],
+      "vidros_usados": ["incolor", "temperado"],
+      "passo_a_passo": [
+        {
+          "passo": 1,
+          "titulo": "Diagnóstico: Qual Produto Usar?",
+          "descricao": "A primeira pergunta antes de qualquer fixação: qual é o vidro e qual é a parede? Vidro temperado (box): SEMPRE silicone neutro — a massa endurece e gera pressão que quebra o vidro. Espelho: silicone especial para espelho — silicone comum mancha a camada prata. Vidro comum em janela de alumínio: silicone acetático funciona bem. Vidro comum em janela de madeira velha: massa pode ser usada, mas observe se a madeira dilata.",
+          "ferramentas": ["silicone", "massa"],
+          "cuidados": [
+            "⚠️ Vidro temperado + massa = receita para quebra após meses",
+            "⚠️ Espelho + silicone comum = manchas escuras que surgem depois de semanas",
+            "⚠️ Alumínio + silicone ácido = corrosão do perfil ao longo do tempo",
+            "Regra prática: na dúvida, sempre use silicone neutro — é o mais seguro",
+            "Cada tipo de silicone tem cheiro distinto: neutro = sem cheiro forte; ácido = cheiro de vinagre forte"
+          ]
+        },
+        {
+          "passo": 2,
+          "titulo": "Tipos de Silicone e Quando Usar Cada Um",
+          "descricao": "Silicone NEUTRO: para box de banheiro, alumínio, vidro temperado — não corrói metais e é seguro para todos os vidros. Silicone ACETÁTICO (ácido): para vidro contra cerâmica seca, concreto ou pedra — mais barato, mas corroe alumínio. Silicone para ESPELHO: fórmula especial sem ácido acético que protege a camada de prata — não substitua por outro tipo. Silicone COLORIDO: para acabamentos estéticos onde a transparência não é necessária.",
+          "ferramentas": ["silicone", "bomba-silicone"],
+          "cuidados": [
+            "Silicone neutro: cheiro quase nulo, levemente adocicado — o mais versátil",
+            "Silicone ácido: cheiro forte de vinagre — NUNCA use em alumínio ou espelhos",
+            "Silicone para espelho: geralmente tem embalagem com identificação 'espelho' — não substitua",
+            "⚠️ Usar silicone errado no espelho: a prata mancha em semanas e o defeito é irreversível",
+            "Silicone transparente: indicado para vidros sem moldura onde o produto ficará visível"
+          ]
+        },
+        {
+          "passo": 3,
+          "titulo": "Tempo de Cura: O Que Acontece se Você Não Esperar",
+          "descricao": "O silicone tem dois estágios: cura superficial (parece seco por fora) e cura total (seco por dentro também). Cura superficial: 2-4h. Cura total: 24-72h dependendo da espessura do cordão, temperatura e ventilação. Um erro clássico: o profissional acha que está seco por fora e entrega o serviço, mas o cliente força o vidro antes do tempo e o silicone cede. Outro erro: aplicar massa de acabamento sobre silicone ainda em cura — o silicone bloqueia a evaporação e a massa pode não secar por dias.",
+          "ferramentas": ["silicone"],
+          "cuidados": [
+            "⚠️ CASO REAL: massa sobre silicone fresco = massa que demora dias ou semanas para secar",
+            "⚠️ Silicone 'seco por fora' não significa curado por dentro — toque com o dedo fundo: se sai borracha, não curou",
+            "Cordões finos de silicone curam em 24h; cordões grossos precisam de 48-72h",
+            "Temperatura < 15°C e ambientes sem ventilação aumentam muito o tempo de cura",
+            "Umidade alta (acima de 80%) paradoxalmente AJUDA a cura do silicone — ele precisa de umidade",
+            "Orientar o cliente: 'Use o box só depois de 24h — o silicone ainda está curando'"
+          ]
+        },
+        {
+          "passo": 4,
+          "titulo": "Massa de Vidraceiro: Quando Usar e Como Usar Certo",
+          "descricao": "A massa tradicional de vidraceiro (massa de caulim com óleo de linhaça) é usada principalmente em janelas de madeira com vidro comum. Ela é mais barata e fácil de aplicar, mas tem desvantagens: endurece com o tempo e gera pressão, pode quebrar vidros sensíveis, seca mais devagar que silicone (48h a 5 dias dependendo da espessura) e não deve jamais ser aplicada sobre silicone fresco. Para acabamento externo com massa, certifique-se que o silicone interno já curou completamente.",
+          "ferramentas": ["massa"],
+          "cuidados": [
+            "⚠️ Massa sobre silicone fresco: pode criar camada que parece seca mas está úmida por baixo",
+            "⚠️ Massa em vidro temperado ou espelho: risco alto de quebra ou manchas — NUNCA use",
+            "Massa seca mais devagar em tempo frio e úmido — informe o cliente",
+            "Massa correta: consistência de plastilina — nem muito dura, nem muito mole",
+            "Depois de seca, pinte a massa com tinta óleo para proteger da chuva e prolongar a durabilidade",
+            "Espessura excessiva de massa aumenta o risco de não secar por dentro mesmo parecendo seca por fora"
+          ]
+        },
+        {
+          "passo": 5,
+          "titulo": "O Cenário Real: Massa Aplicada Sobre Silicone",
+          "descricao": "Situação real relatada por vidraceiros: o profissional sela as bordas do vidro com silicone e, na mesma hora, aplica massa por cima para o acabamento ficar mais liso. Resultado: a massa fica com aparência seca na superfície, mas por baixo o silicone bloqueou a evaporação da massa. A massa pode continuar mole por semanas, descolar com facilidade e criar um acabamento de má qualidade. A solução correta: aplique o silicone, aguarde a cura total (mínimo 48-72h) e SÓ ENTÃO aplique a massa de acabamento.",
+          "ferramentas": ["silicone", "massa", "estilete"],
+          "cuidados": [
+            "⚠️ NUNCA aplique massa diretamente sobre silicone fresco ou em cura",
+            "⚠️ Se já cometeu o erro: aguarde o máximo possível antes de entregar; informe o cliente",
+            "Solução de emergência: remova a massa mal seca com estilete cuidadoso, aguarde o silicone curar, reaplicue",
+            "Sequência correta: silicone → cura total (48-72h) → massa de acabamento por cima",
+            "Alternativa segura: use apenas silicone do começo ao fim — evita o problema completamente",
+            "Deixe o cliente saber o tempo de cura para não ser cobrado por má qualidade indevida"
+          ]
+        },
+        {
+          "passo": 6,
+          "titulo": "Remoção e Limpeza de Excessos",
+          "descricao": "Remova excessos de silicone fresco com pano úmido antes de secar. Silicone curado: use estilete cuidadoso e querosene. Massa fresca: estilete ou espátula úmida. Massa seca: estilete ou formão fino. Nunca use produto abrasivo no vidro para remover silicone ou massa — risca permanentemente.",
+          "ferramentas": ["estilete", "alcool-querosene"],
+          "cuidados": [
+            "Silicone fresco é muito mais fácil de remover — não deixe endurecer antes de limpar",
+            "Querosene amolece silicone curado — aplique e aguarde 5-10 min antes de raspar",
+            "⚠️ Espátula metálica no vidro = risco de arranhão — prefira espátula plástica",
+            "Massa fresca: remova antes de 30 min com estilete — depois de seca, muito mais difícil",
+            "Limpe o vidro final com álcool e pano de microfibra — nunca esponja abrasiva"
+          ]
         }
       ]
     }

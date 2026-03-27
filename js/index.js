@@ -134,12 +134,69 @@ function startSim(id){
   document.getElementById('installList').style.display='none';
   const c=document.getElementById('simContainer');c.classList.add('on');renderSim();
 }
+
+/* ── Context banners rendered dynamically based on step content ── */
+function simContextBanner(s){
+  const desc=(s.descricao+' '+(s.cuidados||[]).join(' ')).toLowerCase();
+  const banners=[];
+
+  // Silicone type detector
+  if(desc.includes('silicone neutro')||desc.includes('silicone especial')||desc.includes('silicone ácido')||desc.includes('silicone acetático')||desc.includes('tipo de silicone')){
+    banners.push(`<div class="sim-ctx ctx-info">
+      <div class="ctx-hd">🧴 GUIA RÁPIDO: Tipos de Silicone</div>
+      <div class="ctx-grid">
+        <div class="ctx-item"><span class="ctx-ico">🟢</span><div><strong>Neutro</strong><br>Box, alumínio, vidro temperado — sem cheiro forte</div></div>
+        <div class="ctx-item"><span class="ctx-ico">🟡</span><div><strong>Acetático (ácido)</strong><br>Cerâmica seca, concreto — cheiro de vinagre, NUNCA use em alumínio</div></div>
+        <div class="ctx-item"><span class="ctx-ico">🪞</span><div><strong>Especial Espelho</strong><br>Único seguro para espelhos — não mancha a camada prata</div></div>
+      </div>
+    </div>`);
+  }
+
+  // Curing time alert
+  if(desc.includes('cura')||desc.includes('secar')||desc.includes('secagem')||desc.includes('48h')||desc.includes('72h')||desc.includes('24h')){
+    banners.push(`<div class="sim-ctx ctx-warn">
+      <div class="ctx-hd">⏱️ TEMPO DE CURA — Não Apresse!</div>
+      <div class="ctx-rows">
+        <div class="ctx-row"><span>Silicone — cura superficial</span><span class="ctx-val">2 – 4h</span></div>
+        <div class="ctx-row"><span>Silicone — cura total</span><span class="ctx-val">24 – 72h*</span></div>
+        <div class="ctx-row"><span>Massa de vidraceiro</span><span class="ctx-val">48h – 5 dias*</span></div>
+        <div class="ctx-row ctx-danger"><span>⚠️ Massa sobre silicone fresco</span><span class="ctx-val">Pode não secar!</span></div>
+      </div>
+      <div class="ctx-note">* Cordões grossos, temperatura fria ou sem ventilação aumentam o tempo</div>
+    </div>`);
+  }
+
+  // Wall type alert
+  if(desc.includes('parede')||desc.includes('mármore')||desc.includes('concreto')||desc.includes('porcelanato')||desc.includes('granito')||desc.includes('broca')||desc.includes('furo')){
+    banners.push(`<div class="sim-ctx ctx-wall">
+      <div class="ctx-hd">🪨 TIPO DE PAREDE × BROCA CERTA</div>
+      <div class="ctx-grid">
+        <div class="ctx-item"><span class="ctx-ico">🧱</span><div><strong>Alvenaria/Tijolo</strong><br>Broca de aço com pastilha — fácil</div></div>
+        <div class="ctx-item"><span class="ctx-ico">🏗️</span><div><strong>Concreto Armado</strong><br>Broca SDS com martelete — sem ferragem!</div></div>
+        <div class="ctx-item"><span class="ctx-ico">🪨</span><div><strong>Mármore/Granito</strong><br>Broca diamantada + ÁGUA — velocidade baixa</div></div>
+        <div class="ctx-item"><span class="ctx-ico">🔲</span><div><strong>Porcelanato</strong><br>Broca diamantada copo — pressão suave</div></div>
+      </div>
+    </div>`);
+  }
+
+  // Massa x silicone real-case warning
+  if(desc.includes('massa sobre silicone')||desc.includes('sobre silicone fresco')||desc.includes('caso real')){
+    banners.push(`<div class="sim-ctx ctx-danger">
+      <div class="ctx-hd">🚨 CASO REAL: Massa Sobre Silicone Fresco</div>
+      <p style="font-size:.82rem;line-height:1.6;margin:0">O silicone bloqueia a evaporação da massa. A massa parece seca por fora mas fica mole por baixo por dias ou semanas. Solução: <strong>aplique o silicone → aguarde 48-72h de cura total → só então aplique a massa de acabamento.</strong></p>
+    </div>`);
+  }
+
+  return banners.join('');
+}
+
 function renderSim(){
   const c=document.getElementById('simContainer');
   const tot=sData.passo_a_passo.length;const s=sData.passo_a_passo[sStep];
   const pct=Math.round((sStep/tot)*100);
   const ft=(s.ferramentas||[]).map(fid=>{const f=DATA.ferramentas.find(x=>x.id===fid);return f?`<div class="stool">${f.icone} ${f.nome}</div>`:''}).join('');
-  const cr=(s.cuidados||[]).map(c=>`<div class="scare ${c.includes('⚠️')?'iw':''}">${c}</div>`).join('');
+  const cr=(s.cuidados||[]).map(c=>`<div class="scare ${c.includes('⚠️')||c.includes('NUNCA')||c.includes('JAMAIS')?'iw':''}">${c}</div>`).join('');
+  const ctx=simContextBanner(s);
   c.innerHTML=`
     <div class="simhdr"><button class="sback" onclick="backToList()">← Voltar</button>
       <div class="stitle">${sData.icone} ${sData.nome}</div></div>
@@ -155,6 +212,7 @@ function renderSim(){
         </div>
       </div>
     </div>
+    ${ctx}
     <div class="snav">
       <button class="sbtn sbtn-p" onclick="prevSt()" ${sStep===0?'disabled':''}>← Anterior</button>
       ${sStep<tot-1?`<button class="sbtn sbtn-n" onclick="nextSt()">Próximo →</button>`:`<button class="sbtn sbtn-n" onclick="finSim()" style="background:var(--success)">✓ Concluir</button>`}

@@ -330,4 +330,32 @@
       font-size:.88rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:opacity .2s}
     .mm-rbtn:hover{opacity:.85}
     .mm-next-btn{display:none;margin-top:.75rem}
-.mm-next-btn.vis{display:block}
+    .mm-next-btn.vis{display:block}
+    /* ── SIMULAÇÃO: Context Banners ── */
+    .sim-ctx{margin:.75rem 0;border-radius:10px;padding:1rem;border:1px solid;animation:fadeIn .4s ease}
+    .ctx-hd{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;
+      letter-spacing:2px;text-transform:uppercase;margin-bottom:.65rem}
+    .ctx-info{background:rgba(88,166,255,0.07);border-color:rgba(88,166,255,0.25)}
+    .ctx-info .ctx-hd{color:var(--accent)}
+    .ctx-warn{background:rgba(210,153,34,0.07);border-color:rgba(210,153,34,0.3)}
+    .ctx-warn .ctx-hd{color:var(--warning)}
+    .ctx-wall{background:rgba(100,140,180,0.07);border-color:rgba(100,140,180,0.25)}
+    .ctx-wall .ctx-hd{color:#7eb8e0}
+    .ctx-danger{background:rgba(248,81,73,0.07);border-color:rgba(248,81,73,0.3)}
+    .ctx-danger .ctx-hd{color:var(--danger)}
+
+    .ctx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+    .ctx-item{display:flex;align-items:flex-start;gap:.5rem;background:rgba(255,255,255,0.03);
+      border-radius:7px;padding:.5rem .65rem;font-size:.77rem;color:var(--text2);line-height:1.4}
+    .ctx-item strong{color:var(--text);display:block}
+    .ctx-ico{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+
+    .ctx-rows{display:flex;flex-direction:column;gap:.3rem}
+    .ctx-row{display:flex;justify-content:space-between;align-items:center;
+      background:rgba(255,255,255,0.03);border-radius:6px;padding:.35rem .65rem;
+      font-size:.78rem;color:var(--text2)}
+    .ctx-row.ctx-danger{background:rgba(248,81,73,0.1);color:var(--danger)}
+    .ctx-val{font-family:'Barlow Condensed',sans-serif;font-weight:700;
+      letter-spacing:.5px;color:var(--text);white-space:nowrap}
+    .ctx-row.ctx-danger .ctx-val{color:var(--danger)}
+    .ctx-note{font-size:.71rem;color:var(--text3);margin-top:.5rem;font-style:italic}
